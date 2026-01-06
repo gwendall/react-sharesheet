@@ -1,14 +1,14 @@
 {
-  "name": "@gwendall/share-menu",
+  "name": "sharesheet",
   "version": "1.0.0",
   "description": "A beautiful share menu component with social media integrations",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "homepage": "https://github.com/gwendall/share-menu#readme",
+  "homepage": "https://github.com/gwendall/sharesheet#readme",
   "bugs": {
-    "url": "https://github.com/gwendall/share-menu/issues"
+    "url": "https://github.com/gwendall/sharesheet/issues"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -49,10 +49,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gwendall/share-menu.git"
+    "url": "https://github.com/gwendall/sharesheet.git"
   },
   "keywords": [
     "share",
+    "sharesheet",
     "menu",
     "social",
     "react",

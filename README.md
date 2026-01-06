@@ -1,7 +1,7 @@
-# @gwendall/share-menu
+# sharesheet
 
-[![npm version](https://img.shields.io/npm/v/@gwendall/share-menu.svg)](https://www.npmjs.com/package/@gwendall/share-menu)
-[![npm downloads](https://img.shields.io/npm/dm/@gwendall/share-menu.svg)](https://www.npmjs.com/package/@gwendall/share-menu)
+[![npm version](https://img.shields.io/npm/v/sharesheet.svg)](https://www.npmjs.com/package/sharesheet)
+[![npm downloads](https://img.shields.io/npm/dm/sharesheet.svg)](https://www.npmjs.com/package/sharesheet)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A beautiful, fully customizable share menu component for React. Supports 15+ social platforms with a modern drawer UI, CSS variable theming, and headless mode for complete control.
@@ -18,11 +18,11 @@ A beautiful, fully customizable share menu component for React. Supports 15+ soc
 ## 📦 Installation
 
 ```bash
-npm install @gwendall/share-menu
+npm install sharesheet
 # or
-pnpm add @gwendall/share-menu
+pnpm add sharesheet
 # or
-yarn add @gwendall/share-menu
+yarn add sharesheet
 ```
 
 ### Peer Dependencies
@@ -40,7 +40,7 @@ Add the package to your `tailwind.config.js` content array:
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@gwendall/share-menu/dist/**/*.{js,mjs}", // 👈 Add this
+    "./node_modules/sharesheet/dist/**/*.{js,mjs}", // 👈 Add this
   ],
   // ...
 }
@@ -51,7 +51,7 @@ module.exports = {
 ### Full Drawer (recommended)
 
 ```tsx
-import { ShareMenuDrawer } from "@gwendall/share-menu";
+import { ShareMenuDrawer } from "sharesheet";
 
 function App() {
   return (
@@ -69,7 +69,7 @@ function App() {
 ### Content Only (for custom modals)
 
 ```tsx
-import { ShareMenuContent } from "@gwendall/share-menu/content";
+import { ShareMenuContent } from "sharesheet/content";
 
 function CustomModal() {
   return (
@@ -86,7 +86,7 @@ function CustomModal() {
 ### Headless (full control)
 
 ```tsx
-import { useShareMenu } from "@gwendall/share-menu/headless";
+import { useShareMenu } from "sharesheet/headless";
 
 function CustomShareUI() {
   const {
@@ -405,13 +405,13 @@ import {
   shareToWhatsApp,
   shareToX,
   // ...
-} from "@gwendall/share-menu";
+} from "sharesheet";
 
 // Content only (smaller bundle)
-import { ShareMenuContent } from "@gwendall/share-menu/content";
+import { ShareMenuContent } from "sharesheet/content";
 
 // Drawer only
-import { ShareMenuDrawer } from "@gwendall/share-menu/drawer";
+import { ShareMenuDrawer } from "sharesheet/drawer";
 
 // Headless (smallest bundle - no UI components)
 import { 
@@ -422,7 +422,7 @@ import {
   shareToWhatsApp, 
   shareToX,
   // ...
-} from "@gwendall/share-menu/headless";
+} from "sharesheet/headless";
 ```
 
 ## 🎨 Platform Utilities
@@ -436,7 +436,7 @@ import {
   PLATFORM_LABELS,
   getPlatform,
   getAllPlatforms,
-} from "@gwendall/share-menu";
+} from "sharesheet";
 
 // Get all platforms
 const platforms = getAllPlatforms();
@@ -461,7 +461,7 @@ const label = PLATFORM_LABELS.whatsapp; // "WhatsApp"
 ### Build a custom share button
 
 ```tsx
-import { getPlatform, shareToWhatsApp } from "@gwendall/share-menu";
+import { getPlatform, shareToWhatsApp } from "sharesheet";
 
 function WhatsAppButton({ url, text }: { url: string; text: string }) {
   const { colors, Icon, label } = getPlatform("whatsapp");
