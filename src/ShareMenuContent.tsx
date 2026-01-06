@@ -67,13 +67,13 @@ const defaultClasses = {
   title: "text-2xl font-black",
   subtitle: "mt-1 text-sm",
   preview: "flex justify-center mb-4 px-4",
-  previewSkeleton: "rounded-lg overflow-hidden",
-  previewImage: "rounded-lg object-contain",
-  previewVideo: "rounded-lg object-contain",
-  previewFile: "rounded-lg flex items-center gap-3 px-4 py-3",
-  previewFileIcon: "flex-shrink-0",
-  previewFilename: "text-sm font-medium truncate",
-  previewLink: "rounded-lg flex items-center gap-3 px-4 py-3",
+  previewSkeleton: "rounded-xl overflow-hidden",
+  previewImage: "",
+  previewVideo: "",
+  previewFile: "",
+  previewFileIcon: "",
+  previewFilename: "truncate",
+  previewLink: "",
   grid: "px-2 py-6 flex flex-row items-center gap-4 gap-y-6 flex-wrap justify-center",
   button: "flex flex-col items-center gap-0 text-xs w-[60px] outline-none cursor-pointer group",
   buttonIcon: "p-2 rounded-full transition-all flex items-center justify-center group-hover:scale-110 group-active:scale-95 mb-2",
@@ -219,31 +219,78 @@ export function ShareMenuContent({
     });
   }, [buttons, show, hide]);
 
-  const showPreview = previewConfig && !mediaError;
+  const showPreview = !!previewConfig;
 
   // Render preview based on type
   const renderPreview = () => {
-    if (!previewConfig || mediaError) return null;
+    if (!previewConfig) return null;
 
     const { type, url, filename, alt, poster } = previewConfig;
     const bgColor = cssVar(CSS_VARS_UI.previewBg, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.previewBg]);
     const shimmerColor = cssVar(CSS_VARS_UI.previewShimmer, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.previewShimmer]);
     const textColor = cssVar(CSS_VARS_UI.subtitleColor, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.subtitleColor]);
 
-    // Common skeleton wrapper for media
-    const MediaSkeleton = ({ children, isLoading }: { children: React.ReactNode; isLoading: boolean }) => (
+    // Card-style preview container (always visible, fixed height)
+    const PreviewCard = ({ 
+      children, 
+      showUrl = false,
+      displayUrl = url 
+    }: { 
+      children: React.ReactNode; 
+      showUrl?: boolean;
+      displayUrl?: string;
+    }) => (
       <div
         className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
         style={{
           position: "relative",
           backgroundColor: bgColor,
-          maxWidth: "100%",
-          maxHeight: "200px",
-          minHeight: isLoading ? "120px" : undefined,
-          minWidth: isLoading ? "200px" : undefined,
+          width: "100%",
+          maxWidth: "280px",
+          height: "140px",
           overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
+        {/* Main content area */}
+        <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+          {children}
+        </div>
+        {/* URL bar at bottom */}
+        {showUrl && (
+          <div
+            style={{
+              padding: "6px 12px",
+              backgroundColor: bgColor,
+            }}
+          >
+            <div
+              className={cn(defaultClasses.previewFilename, classNames.previewFilename)}
+              style={{ 
+                color: textColor, 
+                fontSize: "11px",
+                opacity: 0.7,
+              }}
+            >
+              {displayUrl}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+
+    // Centered icon with shimmer (for loading/error states)
+    const IconPlaceholder = ({ 
+      icon: IconComponent, 
+      isLoading = false,
+      label 
+    }: { 
+      icon: typeof Link2; 
+      isLoading?: boolean;
+      label?: string;
+    }) => (
+      <>
         {isLoading && (
           <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
             <div
@@ -256,32 +303,41 @@ export function ShareMenuContent({
             />
           </div>
         )}
-        {children}
-      </div>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+          }}
+        >
+          <IconComponent size={32} style={{ color: textColor, opacity: 0.5 }} />
+          {label && (
+            <span style={{ color: textColor, fontSize: "12px", opacity: 0.5 }}>
+              {label}
+            </span>
+          )}
+        </div>
+      </>
     );
 
-    // File/Audio preview component
-    const FilePreview = ({ icon: IconComponent, label }: { icon: typeof FileText; label: string }) => (
-      <div
-        className={cn(defaultClasses.previewFile, classNames.previewFile)}
-        style={{ backgroundColor: bgColor }}
-      >
-        <div className={cn(defaultClasses.previewFileIcon, classNames.previewFileIcon)}>
-          <IconComponent size={32} style={{ color: textColor }} />
-        </div>
-        <div
-          className={cn(defaultClasses.previewFilename, classNames.previewFilename)}
-          style={{ color: textColor, maxWidth: "200px" }}
-        >
-          {label}
-        </div>
-      </div>
-    );
+    // If there was an error loading media, show fallback
+    if (mediaError && (type === "image" || type === "video")) {
+      return (
+        <PreviewCard showUrl>
+          <IconPlaceholder icon={Link2} />
+        </PreviewCard>
+      );
+    }
 
     switch (type) {
       case "image":
         return (
-          <MediaSkeleton isLoading={!mediaLoaded}>
+          <PreviewCard showUrl={!mediaLoaded}>
+            <IconPlaceholder icon={Image} isLoading={!mediaLoaded} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={url}
@@ -290,88 +346,87 @@ export function ShareMenuContent({
               onError={handleMediaError}
               className={cn(defaultClasses.previewImage, classNames.previewImage)}
               style={{
-                maxWidth: "100%",
-                maxHeight: "200px",
-                display: "block",
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
                 opacity: mediaLoaded ? 1 : 0,
                 transition: "opacity 0.3s ease-in-out",
               }}
             />
-          </MediaSkeleton>
+          </PreviewCard>
         );
 
       case "video":
         return (
-          <MediaSkeleton isLoading={!mediaLoaded}>
-            <div style={{ position: "relative" }}>
-              <video
-                src={url}
-                poster={poster}
-                onLoadedData={handleMediaLoad}
-                onError={handleMediaError}
-                className={cn(defaultClasses.previewVideo, classNames.previewVideo)}
+          <PreviewCard showUrl={!mediaLoaded}>
+            <IconPlaceholder icon={Film} isLoading={!mediaLoaded} />
+            <video
+              src={url}
+              poster={poster}
+              onLoadedData={handleMediaLoad}
+              onError={handleMediaError}
+              className={cn(defaultClasses.previewVideo, classNames.previewVideo)}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                opacity: mediaLoaded ? 1 : 0,
+                transition: "opacity 0.3s ease-in-out",
+              }}
+              muted
+              playsInline
+              preload="metadata"
+            />
+            {/* Play icon overlay */}
+            {mediaLoaded && (
+              <div
                 style={{
-                  maxWidth: "100%",
-                  maxHeight: "200px",
-                  display: "block",
-                  opacity: mediaLoaded ? 1 : 0,
-                  transition: "opacity 0.3s ease-in-out",
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  pointerEvents: "none",
                 }}
-                muted
-                playsInline
-                preload="metadata"
-              />
-              {/* Play icon overlay */}
-              {mediaLoaded && (
+              >
                 <div
                   style={{
-                    position: "absolute",
-                    inset: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    pointerEvents: "none",
+                    backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    borderRadius: "50%",
+                    padding: "12px",
                   }}
                 >
-                  <div
-                    style={{
-                      backgroundColor: "rgba(0, 0, 0, 0.6)",
-                      borderRadius: "50%",
-                      padding: "12px",
-                    }}
-                  >
-                    <Play size={24} fill="white" color="white" />
-                  </div>
+                  <Play size={24} fill="white" color="white" />
                 </div>
-              )}
-            </div>
-          </MediaSkeleton>
+              </div>
+            )}
+          </PreviewCard>
         );
 
       case "audio":
-        return <FilePreview icon={Music} label={filename || "Audio file"} />;
+        return (
+          <PreviewCard showUrl displayUrl={filename || "Audio file"}>
+            <IconPlaceholder icon={Music} />
+          </PreviewCard>
+        );
 
       case "file":
-        return <FilePreview icon={FileText} label={filename || "File"} />;
+        return (
+          <PreviewCard showUrl displayUrl={filename || "File"}>
+            <IconPlaceholder icon={FileText} />
+          </PreviewCard>
+        );
 
       case "link":
       default:
-        // For links, show a simple link preview
         return (
-          <div
-            className={cn(defaultClasses.previewLink, classNames.previewLink)}
-            style={{ backgroundColor: bgColor }}
-          >
-            <div className={cn(defaultClasses.previewFileIcon, classNames.previewFileIcon)}>
-              <Link2 size={24} style={{ color: textColor }} />
-            </div>
-            <div
-              className={cn(defaultClasses.previewFilename, classNames.previewFilename)}
-              style={{ color: textColor, maxWidth: "250px" }}
-            >
-              {url}
-            </div>
-          </div>
+          <PreviewCard showUrl>
+            <IconPlaceholder icon={Link2} />
+          </PreviewCard>
         );
     }
   };
