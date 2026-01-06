@@ -1,6 +1,6 @@
 // Headless exports - just the hook and utilities, no styled components
 
-export { useShareMenu, type UseShareMenuOptions } from "./hooks";
+export { useShareSheet, useShareMenu, type UseShareSheetOptions, type UseShareMenuOptions } from "./hooks";
 
 export {
   shareToWhatsApp,
@@ -38,6 +38,7 @@ export {
 } from "./platforms";
 
 export type {
+  UseShareSheetReturn,
   UseShareMenuReturn,
   ShareOption,
   ShareButtonConfig,

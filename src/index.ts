@@ -1,18 +1,25 @@
 // Styled components
-export { ShareMenuContent } from "./ShareMenuContent";
-export { ShareMenuDrawer } from "./ShareMenuDrawer";
+export { ShareSheetContent, ShareMenuContent } from "./ShareSheetContent";
+export { ShareSheetDrawer, ShareMenuDrawer } from "./ShareSheetDrawer";
 
 // Headless hook
-export { useShareMenu, type UseShareMenuOptions } from "./hooks";
+export { useShareSheet, useShareMenu, type UseShareSheetOptions, type UseShareMenuOptions } from "./hooks";
 
 // Types
 export type {
+  ShareSheetContentProps,
+  ShareSheetDrawerProps,
+  ShareSheetContentClassNames,
+  ShareSheetDrawerClassNames,
+  // Legacy types (deprecated)
   ShareMenuContentProps,
   ShareMenuDrawerProps,
   ShareMenuContentClassNames,
   ShareMenuDrawerClassNames,
+  // Common types
   ShareOption,
   ShareButtonConfig,
+  UseShareSheetReturn,
   UseShareMenuReturn,
   PreviewType,
   PreviewConfig,

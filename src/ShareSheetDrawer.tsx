@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Drawer } from "vaul";
 
 import { cn } from "./utils";
-import { ShareMenuContent } from "./ShareMenuContent";
-import { CSS_VARS_UI, CSS_VAR_UI_DEFAULTS, type ShareMenuDrawerProps } from "./types";
+import { ShareSheetContent } from "./ShareSheetContent";
+import { CSS_VARS_UI, CSS_VAR_UI_DEFAULTS, type ShareSheetDrawerProps } from "./types";
 
 // Default class names for drawer
 const defaultDrawerClasses = {
@@ -21,7 +21,7 @@ function cssVar(name: string, fallback: string): string {
   return `var(${name}, ${fallback})`;
 }
 
-export function ShareMenuDrawer({
+export function ShareSheetDrawer({
   title = "Share",
   shareUrl,
   shareText,
@@ -43,7 +43,7 @@ export function ShareMenuDrawer({
   show,
   labels,
   icons,
-}: ShareMenuDrawerProps) {
+}: ShareSheetDrawerProps) {
   const [internalOpen, setInternalOpen] = useState(false);
 
   const isControlled = controlledOpen !== undefined;
@@ -93,7 +93,7 @@ export function ShareMenuDrawer({
               }}
             />
 
-            <ShareMenuContent
+            <ShareSheetContent
               title={title}
               shareUrl={shareUrl}
               shareText={shareText}
@@ -121,3 +121,8 @@ export function ShareMenuDrawer({
     </Drawer.Root>
   );
 }
+
+// Legacy export for backwards compatibility
+/** @deprecated Use ShareSheetDrawer instead */
+export const ShareMenuDrawer = ShareSheetDrawer;
+

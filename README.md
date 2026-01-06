@@ -4,7 +4,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/sharesheet.svg)](https://www.npmjs.com/package/sharesheet)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A beautiful, fully customizable share menu component for React. Supports 15+ social platforms with a modern drawer UI, CSS variable theming, and headless mode for complete control.
+A beautiful, fully customizable share sheet component for React. Supports 15+ social platforms with a modern drawer UI, CSS variable theming, and headless mode for complete control.
 
 ## ✨ Features
 
@@ -51,17 +51,17 @@ module.exports = {
 ### Full Drawer (recommended)
 
 ```tsx
-import { ShareMenuDrawer } from "sharesheet";
+import { ShareSheetDrawer } from "sharesheet";
 
 function App() {
   return (
-    <ShareMenuDrawer
+    <ShareSheetDrawer
       title="Share this!"
       shareUrl="https://example.com"
       shareText="Check out this awesome page!"
     >
       <button>Share</button>
-    </ShareMenuDrawer>
+    </ShareSheetDrawer>
   );
 }
 ```
@@ -69,12 +69,12 @@ function App() {
 ### Content Only (for custom modals)
 
 ```tsx
-import { ShareMenuContent } from "sharesheet/content";
+import { ShareSheetContent } from "sharesheet/content";
 
 function CustomModal() {
   return (
     <Dialog>
-      <ShareMenuContent
+      <ShareSheetContent
         shareUrl="https://example.com"
         shareText="Check this out!"
       />
@@ -86,7 +86,7 @@ function CustomModal() {
 ### Headless (full control)
 
 ```tsx
-import { useShareMenu } from "sharesheet/headless";
+import { useShareSheet } from "sharesheet/headless";
 
 function CustomShareUI() {
   const {
@@ -96,7 +96,7 @@ function CustomShareUI() {
     nativeShare,
     shareWhatsApp,
     shareX,
-  } = useShareMenu({
+  } = useShareSheet({
     shareUrl: "https://example.com",
     shareText: "Check this out!",
   });
@@ -114,35 +114,35 @@ function CustomShareUI() {
 
 ## 🖼️ Content Preview
 
-The share menu can display a preview of the content being shared. It automatically detects the content type based on the URL and displays an appropriate preview.
+The share sheet can display a preview of the content being shared. It automatically detects the content type based on the URL and displays an appropriate preview.
 
 ### Auto-detection
 
 ```tsx
 // Image preview (detected from extension)
-<ShareMenuDrawer preview="https://example.com/image.png" {...props} />
+<ShareSheetDrawer preview="https://example.com/image.png" {...props} />
 
 // Video preview (detected from extension)
-<ShareMenuDrawer preview="https://example.com/video.mp4" {...props} />
+<ShareSheetDrawer preview="https://example.com/video.mp4" {...props} />
 
 // Audio file (shows icon + filename)
-<ShareMenuDrawer preview="https://example.com/song.mp3" {...props} />
+<ShareSheetDrawer preview="https://example.com/song.mp3" {...props} />
 
 // Link (shows link icon + URL)
-<ShareMenuDrawer preview="https://example.com/page" {...props} />
+<ShareSheetDrawer preview="https://example.com/page" {...props} />
 ```
 
 ### Explicit Type
 
 ```tsx
 // Force image type (e.g., for API endpoints)
-<ShareMenuDrawer
+<ShareSheetDrawer
   preview={{ url: "/api/og?id=123", type: "image" }}
   {...props}
 />
 
 // Video with poster image
-<ShareMenuDrawer
+<ShareSheetDrawer
   preview={{
     url: "https://example.com/video.mp4",
     type: "video",
@@ -152,7 +152,7 @@ The share menu can display a preview of the content being shared. It automatical
 />
 
 // File with custom filename
-<ShareMenuDrawer
+<ShareSheetDrawer
   preview={{
     url: "https://example.com/doc.pdf",
     type: "file",
@@ -189,34 +189,34 @@ Override these variables to match your theme:
 ```css
 :root {
   /* Drawer */
-  --share-menu-overlay-bg: rgba(0, 0, 0, 0.7);
-  --share-menu-drawer-bg: #09090b;
-  --share-menu-drawer-border: #27272a;
-  --share-menu-handle-bg: #27272a;
+  --sharesheet-overlay-bg: rgba(0, 0, 0, 0.7);
+  --sharesheet-drawer-bg: #09090b;
+  --sharesheet-drawer-border: #27272a;
+  --sharesheet-handle-bg: #27272a;
   
   /* Typography */
-  --share-menu-title-color: #ffffff;
-  --share-menu-subtitle-color: #a1a1aa;
-  --share-menu-button-label-color: #ffffff;
+  --sharesheet-title-color: #ffffff;
+  --sharesheet-subtitle-color: #a1a1aa;
+  --sharesheet-button-label-color: #ffffff;
   
   /* Image Preview */
-  --share-menu-preview-bg: rgba(255, 255, 255, 0.05);
-  --share-menu-preview-shimmer: rgba(255, 255, 255, 0.1);
+  --sharesheet-preview-bg: rgba(255, 255, 255, 0.05);
+  --sharesheet-preview-shimmer: rgba(255, 255, 255, 0.1);
   
   /* Platform colors (optional - defaults to brand colors) */
-  --share-menu-whatsapp-bg: #25D366;
-  --share-menu-telegram-bg: #229ED9;
+  --sharesheet-whatsapp-bg: #25D366;
+  --sharesheet-telegram-bg: #229ED9;
   /* ... see full list below */
 }
 
 /* Dark/Light mode support */
 .dark {
-  --share-menu-drawer-bg: #0a0a0a;
+  --sharesheet-drawer-bg: #0a0a0a;
 }
 
 .light {
-  --share-menu-drawer-bg: #ffffff;
-  --share-menu-title-color: #09090b;
+  --sharesheet-drawer-bg: #ffffff;
+  --sharesheet-title-color: #09090b;
 }
 ```
 
@@ -225,36 +225,36 @@ Override these variables to match your theme:
 
 ```css
 /* Drawer */
---share-menu-overlay-bg: rgba(0, 0, 0, 0.7);
---share-menu-drawer-bg: #09090b;
---share-menu-drawer-border: #27272a;
---share-menu-handle-bg: #27272a;
+--sharesheet-overlay-bg: rgba(0, 0, 0, 0.7);
+--sharesheet-drawer-bg: #09090b;
+--sharesheet-drawer-border: #27272a;
+--sharesheet-handle-bg: #27272a;
 
 /* Typography */
---share-menu-title-color: #ffffff;
---share-menu-subtitle-color: #a1a1aa;
---share-menu-button-label-color: #ffffff;
+--sharesheet-title-color: #ffffff;
+--sharesheet-subtitle-color: #a1a1aa;
+--sharesheet-button-label-color: #ffffff;
 
 /* Image Preview */
---share-menu-preview-bg: rgba(255, 255, 255, 0.05);
---share-menu-preview-shimmer: rgba(255, 255, 255, 0.1);
+--sharesheet-preview-bg: rgba(255, 255, 255, 0.05);
+--sharesheet-preview-shimmer: rgba(255, 255, 255, 0.1);
 
 /* Platform backgrounds */
---share-menu-native-share-bg: #7c3aed;
---share-menu-copy-bg: #3b82f6;
---share-menu-download-bg: #ef4444;
---share-menu-whatsapp-bg: #25D366;
---share-menu-telegram-bg: #229ED9;
---share-menu-instagram-bg: #E1306C;
---share-menu-facebook-bg: #1877F2;
---share-menu-snapchat-bg: #FFFC00;
---share-menu-sms-bg: #22c55e;
---share-menu-email-bg: #f97316;
---share-menu-linkedin-bg: #0A66C2;
---share-menu-reddit-bg: #FF4500;
---share-menu-x-bg: #000000;
---share-menu-tiktok-bg: #000000;
---share-menu-threads-bg: #000000;
+--sharesheet-native-bg: #7c3aed;
+--sharesheet-copy-bg: #3b82f6;
+--sharesheet-download-bg: #ef4444;
+--sharesheet-whatsapp-bg: #25D366;
+--sharesheet-telegram-bg: #229ED9;
+--sharesheet-instagram-bg: #E1306C;
+--sharesheet-facebook-bg: #1877F2;
+--sharesheet-snapchat-bg: #FFFC00;
+--sharesheet-sms-bg: #22c55e;
+--sharesheet-email-bg: #f97316;
+--sharesheet-linkedin-bg: #0A66C2;
+--sharesheet-reddit-bg: #FF4500;
+--sharesheet-x-bg: #000000;
+--sharesheet-tiktok-bg: #000000;
+--sharesheet-threads-bg: #000000;
 ```
 
 </details>
@@ -264,7 +264,7 @@ Override these variables to match your theme:
 Override any part of the component with `classNames`:
 
 ```tsx
-<ShareMenuDrawer
+<ShareSheetDrawer
   shareUrl="..."
   shareText="..."
   classNames={{
@@ -291,7 +291,7 @@ Override any part of the component with `classNames`:
 
 ### Props
 
-#### ShareMenuContent / ShareMenuDrawer
+#### ShareSheetContent / ShareSheetDrawer
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -313,7 +313,7 @@ Override any part of the component with `classNames`:
 | `onCopy` | `() => void` | — | Copy callback |
 | `onDownload` | `() => void` | — | Download callback |
 
-#### ShareMenuDrawer (additional)
+#### ShareSheetDrawer (additional)
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -345,7 +345,7 @@ type ShareOption =
   | "threads";
 ```
 
-### useShareMenu Hook
+### useShareSheet Hook
 
 ```ts
 const {
@@ -372,7 +372,7 @@ const {
   shareEmail,      // () => void
   shareLinkedIn,   // () => void
   shareReddit,     // () => void
-} = useShareMenu({
+} = useShareSheet({
   shareUrl: string,
   shareText: string,
   downloadUrl?: string,
@@ -389,9 +389,9 @@ const {
 ```ts
 // Everything
 import { 
-  ShareMenuDrawer, 
-  ShareMenuContent,
-  useShareMenu,
+  ShareSheetDrawer, 
+  ShareSheetContent,
+  useShareSheet,
   CSS_VARS,
   CSS_VAR_DEFAULTS,
   // Platform utilities
@@ -408,14 +408,14 @@ import {
 } from "sharesheet";
 
 // Content only (smaller bundle)
-import { ShareMenuContent } from "sharesheet/content";
+import { ShareSheetContent } from "sharesheet/content";
 
 // Drawer only
-import { ShareMenuDrawer } from "sharesheet/drawer";
+import { ShareSheetDrawer } from "sharesheet/drawer";
 
 // Headless (smallest bundle - no UI components)
 import { 
-  useShareMenu, 
+  useShareSheet, 
   PLATFORM_COLORS,
   PLATFORM_ICONS,
   getPlatform,
@@ -484,14 +484,14 @@ function WhatsAppButton({ url, text }: { url: string; text: string }) {
 
 ```tsx
 // Show only specific platforms
-<ShareMenuContent
+<ShareSheetContent
   shareUrl="..."
   shareText="..."
   show={["copy", "whatsapp", "telegram", "x"]}
 />
 
 // Hide specific platforms
-<ShareMenuContent
+<ShareSheetContent
   shareUrl="..."
   shareText="..."
   hide={["tiktok", "snapchat", "threads"]}
@@ -501,7 +501,7 @@ function WhatsAppButton({ url, text }: { url: string; text: string }) {
 ### Custom labels
 
 ```tsx
-<ShareMenuContent
+<ShareSheetContent
   shareUrl="..."
   shareText="..."
   labels={{
@@ -515,14 +515,14 @@ function WhatsAppButton({ url, text }: { url: string; text: string }) {
 ### With download
 
 ```tsx
-<ShareMenuDrawer
+<ShareSheetDrawer
   shareUrl="https://example.com/post/123"
   shareText="Check out my video!"
   downloadUrl="https://example.com/video.mp4"
   downloadFilename="my-video.mp4"
 >
   <button>Share</button>
-</ShareMenuDrawer>
+</ShareSheetDrawer>
 ```
 
 ### Controlled state
@@ -533,15 +533,15 @@ function ControlledExample() {
 
   return (
     <>
-      <button onClick={() => setOpen(true)}>Open Share Menu</button>
-      <ShareMenuDrawer
+      <button onClick={() => setOpen(true)}>Open Share Sheet</button>
+      <ShareSheetDrawer
         open={open}
         onOpenChange={setOpen}
         shareUrl="..."
         shareText="..."
       >
         <span /> {/* Hidden trigger */}
-      </ShareMenuDrawer>
+      </ShareSheetDrawer>
     </>
   );
 }
@@ -553,6 +553,24 @@ function ControlledExample() {
 - Tailwind CSS (for default styling)
 
 > **Note:** If you're not using Tailwind, you can use the headless hook to build your own UI, or override all classes via `classNames`.
+
+## 🔄 Migration from v0.x
+
+If you're upgrading from `@gwendall/share-menu`:
+
+```tsx
+// Old imports
+import { ShareMenuDrawer, ShareMenuContent, useShareMenu } from "@gwendall/share-menu";
+
+// New imports (backwards compatible aliases available)
+import { ShareSheetDrawer, ShareSheetContent, useShareSheet } from "sharesheet";
+
+// CSS variables changed from --share-menu-* to --sharesheet-*
+// Old: --share-menu-drawer-bg
+// New: --sharesheet-drawer-bg
+```
+
+Legacy exports (`ShareMenuDrawer`, `ShareMenuContent`, `useShareMenu`) are still available but deprecated.
 
 ## 🤝 Contributing
 

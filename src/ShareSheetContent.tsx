@@ -3,7 +3,7 @@
 import { useMemo, useState, useCallback } from "react";
 import { Image, FileText, Music, Film, Link2, Play } from "lucide-react";
 import { cn } from "./utils";
-import { useShareMenu } from "./hooks";
+import { useShareSheet } from "./hooks";
 import {
   PLATFORM_IDS,
   PLATFORM_COLORS,
@@ -14,7 +14,7 @@ import {
 import {
   CSS_VARS_UI,
   CSS_VAR_UI_DEFAULTS,
-  type ShareMenuContentProps,
+  type ShareSheetContentProps,
   type ShareOption,
   type ShareButtonConfig,
   type PreviewConfig,
@@ -82,7 +82,7 @@ const defaultClasses = {
 
 // Shimmer keyframes as inline style
 const shimmerKeyframes = `
-@keyframes share-menu-shimmer {
+@keyframes sharesheet-shimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
@@ -116,7 +116,7 @@ function normalizePreview(preview: string | PreviewConfig | null | undefined): P
   };
 }
 
-export function ShareMenuContent({
+export function ShareSheetContent({
   title = "Share",
   shareUrl,
   shareText,
@@ -134,7 +134,7 @@ export function ShareMenuContent({
   show,
   labels = {},
   icons = {},
-}: ShareMenuContentProps) {
+}: ShareSheetContentProps) {
   const [mediaLoaded, setMediaLoaded] = useState(false);
   const [mediaError, setMediaError] = useState(false);
 
@@ -149,7 +149,7 @@ export function ShareMenuContent({
   // Normalize preview config
   const previewConfig = useMemo(() => normalizePreview(preview), [preview]);
 
-  const shareMenu = useShareMenu({
+  const shareSheet = useShareSheet({
     shareUrl,
     shareText,
     downloadUrl,
@@ -162,28 +162,28 @@ export function ShareMenuContent({
 
   // Map platform IDs to their share actions
   const shareActions: Record<ShareOption, () => void> = useMemo(() => ({
-    native: () => void shareMenu.nativeShare(),
-    copy: () => void shareMenu.copyLink(),
-    download: () => void shareMenu.downloadFile(),
-    whatsapp: shareMenu.shareWhatsApp,
-    telegram: shareMenu.shareTelegram,
-    instagram: shareMenu.shareInstagram,
-    facebook: shareMenu.shareFacebook,
-    snapchat: shareMenu.shareSnapchat,
-    sms: shareMenu.shareSMS,
-    email: shareMenu.shareEmail,
-    linkedin: shareMenu.shareLinkedIn,
-    reddit: shareMenu.shareReddit,
-    x: shareMenu.shareX,
-    tiktok: shareMenu.shareTikTok,
-    threads: shareMenu.shareThreads,
-  }), [shareMenu]);
+    native: () => void shareSheet.nativeShare(),
+    copy: () => void shareSheet.copyLink(),
+    download: () => void shareSheet.downloadFile(),
+    whatsapp: shareSheet.shareWhatsApp,
+    telegram: shareSheet.shareTelegram,
+    instagram: shareSheet.shareInstagram,
+    facebook: shareSheet.shareFacebook,
+    snapchat: shareSheet.shareSnapchat,
+    sms: shareSheet.shareSMS,
+    email: shareSheet.shareEmail,
+    linkedin: shareSheet.shareLinkedIn,
+    reddit: shareSheet.shareReddit,
+    x: shareSheet.shareX,
+    tiktok: shareSheet.shareTikTok,
+    threads: shareSheet.shareThreads,
+  }), [shareSheet]);
 
   // Dynamic labels that depend on state
   const dynamicLabels: Partial<Record<ShareOption, string>> = useMemo(() => ({
-    copy: shareMenu.copied ? "Copied!" : PLATFORM_LABELS.copy,
-    download: shareMenu.downloading ? "..." : PLATFORM_LABELS.download,
-  }), [shareMenu.copied, shareMenu.downloading]);
+    copy: shareSheet.copied ? "Copied!" : PLATFORM_LABELS.copy,
+    download: shareSheet.downloading ? "..." : PLATFORM_LABELS.download,
+  }), [shareSheet.copied, shareSheet.downloading]);
 
   // Build button configs from platform data
   const buttons: ShareButtonConfig[] = useMemo(() => {
@@ -200,12 +200,12 @@ export function ShareMenuContent({
         textColor: PLATFORM_COLORS[id].text,
         onClick: shareActions[id],
         // Conditions for showing certain buttons
-        condition: id === "native" ? shareMenu.canNativeShare
+        condition: id === "native" ? shareSheet.canNativeShare
           : id === "download" ? !!downloadUrl
           : true,
       };
     });
-  }, [iconSize, labels, icons, dynamicLabels, shareActions, shareMenu.canNativeShare, downloadUrl]);
+  }, [iconSize, labels, icons, dynamicLabels, shareActions, shareSheet.canNativeShare, downloadUrl]);
 
   const visibleButtons = useMemo(() => {
     return buttons.filter((btn) => {
@@ -279,7 +279,7 @@ export function ShareMenuContent({
                   position: "absolute",
                   inset: 0,
                   background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
-                  animation: "share-menu-shimmer 1.5s infinite",
+                  animation: "sharesheet-shimmer 1.5s infinite",
                 }}
               />
             </div>
@@ -335,7 +335,7 @@ export function ShareMenuContent({
                       position: "absolute",
                       inset: 0,
                       background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
-                      animation: "share-menu-shimmer 1.5s infinite",
+                      animation: "sharesheet-shimmer 1.5s infinite",
                     }}
                   />
                 </div>
@@ -397,7 +397,7 @@ export function ShareMenuContent({
                       position: "absolute",
                       inset: 0,
                       background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
-                      animation: "share-menu-shimmer 1.5s infinite",
+                      animation: "sharesheet-shimmer 1.5s infinite",
                     }}
                   />
                 </div>
@@ -531,3 +531,8 @@ export function ShareMenuContent({
     </div>
   );
 }
+
+// Legacy export for backwards compatibility
+/** @deprecated Use ShareSheetContent instead */
+export const ShareMenuContent = ShareSheetContent;
+

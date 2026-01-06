@@ -120,21 +120,21 @@ export const PLATFORM_ICONS: Record<ShareOption, (props: { size?: number; classN
 
 /** CSS variable names for platform backgrounds */
 export const PLATFORM_CSS_VARS: Record<ShareOption, string> = {
-  native: "--share-menu-native-share-bg",
-  copy: "--share-menu-copy-bg",
-  download: "--share-menu-download-bg",
-  whatsapp: "--share-menu-whatsapp-bg",
-  telegram: "--share-menu-telegram-bg",
-  instagram: "--share-menu-instagram-bg",
-  facebook: "--share-menu-facebook-bg",
-  snapchat: "--share-menu-snapchat-bg",
-  sms: "--share-menu-sms-bg",
-  email: "--share-menu-email-bg",
-  linkedin: "--share-menu-linkedin-bg",
-  reddit: "--share-menu-reddit-bg",
-  x: "--share-menu-x-bg",
-  tiktok: "--share-menu-tiktok-bg",
-  threads: "--share-menu-threads-bg",
+  native: "--sharesheet-native-bg",
+  copy: "--sharesheet-copy-bg",
+  download: "--sharesheet-download-bg",
+  whatsapp: "--sharesheet-whatsapp-bg",
+  telegram: "--sharesheet-telegram-bg",
+  instagram: "--sharesheet-instagram-bg",
+  facebook: "--sharesheet-facebook-bg",
+  snapchat: "--sharesheet-snapchat-bg",
+  sms: "--sharesheet-sms-bg",
+  email: "--sharesheet-email-bg",
+  linkedin: "--sharesheet-linkedin-bg",
+  reddit: "--sharesheet-reddit-bg",
+  x: "--sharesheet-x-bg",
+  tiktok: "--sharesheet-tiktok-bg",
+  threads: "--sharesheet-threads-bg",
 } as const;
 
 /** Full platform configurations */

@@ -16,9 +16,9 @@ import {
   shareToLinkedIn,
   shareToReddit,
 } from "./share-functions";
-import type { UseShareMenuReturn } from "./types";
+import type { UseShareSheetReturn } from "./types";
 
-export interface UseShareMenuOptions {
+export interface UseShareSheetOptions {
   /** URL to share */
   shareUrl: string;
   /** Text to share */
@@ -38,10 +38,10 @@ export interface UseShareMenuOptions {
 }
 
 /**
- * Headless hook for share menu functionality.
+ * Headless hook for share sheet functionality.
  * Use this to build your own custom share UI.
  */
-export function useShareMenu({
+export function useShareSheet({
   shareUrl,
   shareText,
   downloadUrl,
@@ -50,7 +50,7 @@ export function useShareMenu({
   onNativeShare,
   onCopy,
   onDownload,
-}: UseShareMenuOptions): UseShareMenuReturn {
+}: UseShareSheetOptions): UseShareSheetReturn {
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
@@ -185,3 +185,8 @@ export function useShareMenu({
   };
 }
 
+// Legacy export for backwards compatibility
+/** @deprecated Use useShareSheet instead */
+export const useShareMenu = useShareSheet;
+/** @deprecated Use UseShareSheetOptions instead */
+export type UseShareMenuOptions = UseShareSheetOptions;

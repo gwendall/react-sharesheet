@@ -3,17 +3,17 @@ import type { ReactNode } from "react";
 /** CSS variable names for UI elements (non-platform specific) */
 export const CSS_VARS_UI = {
   // Drawer
-  overlayBg: "--share-menu-overlay-bg",
-  drawerBg: "--share-menu-drawer-bg",
-  drawerBorder: "--share-menu-drawer-border",
-  handleBg: "--share-menu-handle-bg",
+  overlayBg: "--sharesheet-overlay-bg",
+  drawerBg: "--sharesheet-drawer-bg",
+  drawerBorder: "--sharesheet-drawer-border",
+  handleBg: "--sharesheet-handle-bg",
   // Content
-  titleColor: "--share-menu-title-color",
-  subtitleColor: "--share-menu-subtitle-color",
-  buttonLabelColor: "--share-menu-button-label-color",
+  titleColor: "--sharesheet-title-color",
+  subtitleColor: "--sharesheet-subtitle-color",
+  buttonLabelColor: "--sharesheet-button-label-color",
   // Preview
-  previewBg: "--share-menu-preview-bg",
-  previewShimmer: "--share-menu-preview-shimmer",
+  previewBg: "--sharesheet-preview-bg",
+  previewShimmer: "--sharesheet-preview-shimmer",
 } as const;
 
 /** Default values for UI CSS variables */
@@ -47,8 +47,8 @@ export type ShareOption =
   | "tiktok"
   | "threads";
 
-/** Class name overrides for ShareMenuContent */
-export interface ShareMenuContentClassNames {
+/** Class name overrides for ShareSheetContent */
+export interface ShareSheetContentClassNames {
   /** Root container */
   root?: string;
   /** Title container */
@@ -83,8 +83,8 @@ export interface ShareMenuContentClassNames {
   buttonLabel?: string;
 }
 
-/** Class name overrides for ShareMenuDrawer */
-export interface ShareMenuDrawerClassNames extends ShareMenuContentClassNames {
+/** Class name overrides for ShareSheetDrawer */
+export interface ShareSheetDrawerClassNames extends ShareSheetContentClassNames {
   /** Drawer overlay */
   overlay?: string;
   /** Drawer content panel */
@@ -114,8 +114,8 @@ export interface PreviewConfig {
   poster?: string;
 }
 
-export interface ShareMenuContentProps {
-  /** Title displayed at the top of the menu */
+export interface ShareSheetContentProps {
+  /** Title displayed at the top of the sheet */
   title?: string;
   /** URL to share */
   shareUrl: string;
@@ -130,7 +130,7 @@ export interface ShareMenuContentProps {
   /** Custom class name for the container (shorthand for classNames.root) */
   className?: string;
   /** Override class names for sub-components */
-  classNames?: ShareMenuContentClassNames;
+  classNames?: ShareSheetContentClassNames;
   /** Button size in pixels */
   buttonSize?: number;
   /** Icon size in pixels */
@@ -151,7 +151,7 @@ export interface ShareMenuContentProps {
   icons?: Partial<Record<ShareOption, ReactNode>>;
 }
 
-export interface ShareMenuDrawerProps extends ShareMenuContentProps {
+export interface ShareSheetDrawerProps extends ShareSheetContentProps {
   /** Whether the drawer is disabled */
   disabled?: boolean;
   /** Trigger element for the drawer */
@@ -161,7 +161,7 @@ export interface ShareMenuDrawerProps extends ShareMenuContentProps {
   /** Callback when open state changes */
   onOpenChange?: (open: boolean) => void;
   /** Override class names for sub-components */
-  classNames?: ShareMenuDrawerClassNames;
+  classNames?: ShareSheetDrawerClassNames;
 }
 
 /** Share button configuration (internal) */
@@ -175,8 +175,8 @@ export interface ShareButtonConfig {
   condition?: boolean;
 }
 
-/** Return type of useShareMenu hook */
-export interface UseShareMenuReturn {
+/** Return type of useShareSheet hook */
+export interface UseShareSheetReturn {
   /** Whether the browser supports native share */
   canNativeShare: boolean;
   /** Whether the link was recently copied */
@@ -222,3 +222,15 @@ export interface UseShareMenuReturn {
 export const CSS_VARS = CSS_VARS_UI;
 /** @deprecated Use CSS_VAR_UI_DEFAULTS instead */
 export const CSS_VAR_DEFAULTS = CSS_VAR_UI_DEFAULTS;
+
+// Legacy type aliases for backwards compatibility
+/** @deprecated Use ShareSheetContentClassNames instead */
+export type ShareMenuContentClassNames = ShareSheetContentClassNames;
+/** @deprecated Use ShareSheetDrawerClassNames instead */
+export type ShareMenuDrawerClassNames = ShareSheetDrawerClassNames;
+/** @deprecated Use ShareSheetContentProps instead */
+export type ShareMenuContentProps = ShareSheetContentProps;
+/** @deprecated Use ShareSheetDrawerProps instead */
+export type ShareMenuDrawerProps = ShareSheetDrawerProps;
+/** @deprecated Use UseShareSheetReturn instead */
+export type UseShareMenuReturn = UseShareSheetReturn;
