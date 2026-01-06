@@ -230,159 +230,212 @@ export function ShareMenuContent({
     const shimmerColor = cssVar(CSS_VARS_UI.previewShimmer, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.previewShimmer]);
     const textColor = cssVar(CSS_VARS_UI.subtitleColor, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.subtitleColor]);
 
-    // Card-style preview container (always visible, fixed height)
-    const PreviewCard = ({ 
-      children, 
-      showUrl = false,
-      displayUrl = url 
-    }: { 
-      children: React.ReactNode; 
-      showUrl?: boolean;
-      displayUrl?: string;
-    }) => (
+    // Floating URL label (centered below)
+    const UrlLabel = ({ displayUrl = url }: { displayUrl?: string }) => (
       <div
-        className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
-        style={{
-          position: "relative",
-          backgroundColor: bgColor,
-          width: "100%",
-          maxWidth: "280px",
-          height: "140px",
-          overflow: "hidden",
-          display: "flex",
-          flexDirection: "column",
+        className={cn(defaultClasses.previewFilename, classNames.previewFilename)}
+        style={{ 
+          color: textColor, 
+          fontSize: "10px",
+          opacity: 0.5,
+          textAlign: "center",
+          marginTop: "6px",
         }}
       >
-        {/* Main content area */}
-        <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
-          {children}
-        </div>
-        {/* URL bar at bottom */}
-        {showUrl && (
-          <div
-            style={{
-              padding: "6px 12px",
-              backgroundColor: bgColor,
-            }}
-          >
-            <div
-              className={cn(defaultClasses.previewFilename, classNames.previewFilename)}
-              style={{ 
-                color: textColor, 
-                fontSize: "11px",
-                opacity: 0.7,
-              }}
-            >
-              {displayUrl}
-            </div>
-          </div>
-        )}
+        {displayUrl}
       </div>
     );
 
-    // Centered icon with shimmer (for loading/error states)
-    const IconPlaceholder = ({ 
+    // Placeholder card for non-media types or loading/error states
+    const PlaceholderCard = ({ 
       icon: IconComponent, 
       isLoading = false,
-      label 
+      label,
+      displayUrl,
     }: { 
       icon: typeof Link2; 
       isLoading?: boolean;
       label?: string;
+      displayUrl?: string;
     }) => (
-      <>
-        {isLoading && (
-          <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
-                animation: "share-menu-shimmer 1.5s infinite",
-              }}
-            />
-          </div>
-        )}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div
+          className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
           style={{
-            position: "absolute",
-            inset: 0,
+            position: "relative",
+            backgroundColor: bgColor,
+            width: "200px",
+            height: "120px",
+            overflow: "hidden",
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: "8px",
           }}
         >
-          <IconComponent size={32} style={{ color: textColor, opacity: 0.5 }} />
-          {label && (
-            <span style={{ color: textColor, fontSize: "12px", opacity: 0.5 }}>
-              {label}
-            </span>
+          {isLoading && (
+            <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
+                  animation: "share-menu-shimmer 1.5s infinite",
+                }}
+              />
+            </div>
           )}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+            }}
+          >
+            <IconComponent size={32} style={{ color: textColor, opacity: 0.4 }} />
+            {label && (
+              <span style={{ color: textColor, fontSize: "11px", opacity: 0.4 }}>
+                {label}
+              </span>
+            )}
+          </div>
         </div>
-      </>
+        <UrlLabel displayUrl={displayUrl} />
+      </div>
     );
 
     // If there was an error loading media, show fallback
     if (mediaError && (type === "image" || type === "video")) {
-      return (
-        <PreviewCard showUrl>
-          <IconPlaceholder icon={Link2} />
-        </PreviewCard>
-      );
+      return <PlaceholderCard icon={Link2} displayUrl={url} />;
     }
 
     switch (type) {
       case "image":
+        // Show placeholder while loading, then show image with correct aspect ratio
+        if (!mediaLoaded) {
+          return (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div
+                className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
+                style={{
+                  position: "relative",
+                  backgroundColor: bgColor,
+                  width: "200px",
+                  height: "120px",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
+                      animation: "share-menu-shimmer 1.5s infinite",
+                    }}
+                  />
+                </div>
+                <Image size={32} style={{ color: textColor, opacity: 0.4 }} />
+              </div>
+              <UrlLabel />
+              {/* Hidden image for preloading */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={url}
+                alt={alt || "Preview"}
+                onLoad={handleMediaLoad}
+                onError={handleMediaError}
+                style={{ display: "none" }}
+              />
+            </div>
+          );
+        }
+        // Image loaded - show with correct aspect ratio
         return (
-          <PreviewCard showUrl={!mediaLoaded}>
-            <IconPlaceholder icon={Image} isLoading={!mediaLoaded} />
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={url}
               alt={alt || "Preview"}
-              onLoad={handleMediaLoad}
-              onError={handleMediaError}
               className={cn(defaultClasses.previewImage, classNames.previewImage)}
               style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                opacity: mediaLoaded ? 1 : 0,
+                maxWidth: "100%",
+                maxHeight: "180px",
+                borderRadius: "12px",
+                opacity: 1,
                 transition: "opacity 0.3s ease-in-out",
               }}
             />
-          </PreviewCard>
+            <UrlLabel />
+          </div>
         );
 
       case "video":
+        if (!mediaLoaded) {
+          return (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div
+                className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
+                style={{
+                  position: "relative",
+                  backgroundColor: bgColor,
+                  width: "200px",
+                  height: "120px",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
+                      animation: "share-menu-shimmer 1.5s infinite",
+                    }}
+                  />
+                </div>
+                <Film size={32} style={{ color: textColor, opacity: 0.4 }} />
+              </div>
+              <UrlLabel />
+              {/* Hidden video for preloading */}
+              <video
+                src={url}
+                poster={poster}
+                onLoadedData={handleMediaLoad}
+                onError={handleMediaError}
+                style={{ display: "none" }}
+                muted
+                playsInline
+                preload="metadata"
+              />
+            </div>
+          );
+        }
+        // Video loaded
         return (
-          <PreviewCard showUrl={!mediaLoaded}>
-            <IconPlaceholder icon={Film} isLoading={!mediaLoaded} />
-            <video
-              src={url}
-              poster={poster}
-              onLoadedData={handleMediaLoad}
-              onError={handleMediaError}
-              className={cn(defaultClasses.previewVideo, classNames.previewVideo)}
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                opacity: mediaLoaded ? 1 : 0,
-                transition: "opacity 0.3s ease-in-out",
-              }}
-              muted
-              playsInline
-              preload="metadata"
-            />
-            {/* Play icon overlay */}
-            {mediaLoaded && (
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden" }}>
+              <video
+                src={url}
+                poster={poster}
+                className={cn(defaultClasses.previewVideo, classNames.previewVideo)}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "180px",
+                  display: "block",
+                }}
+                muted
+                playsInline
+                preload="metadata"
+              />
+              {/* Play icon overlay */}
               <div
                 style={{
                   position: "absolute",
@@ -395,39 +448,28 @@ export function ShareMenuContent({
               >
                 <div
                   style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
                     borderRadius: "50%",
-                    padding: "12px",
+                    padding: "10px",
                   }}
                 >
-                  <Play size={24} fill="white" color="white" />
+                  <Play size={20} fill="white" color="white" />
                 </div>
               </div>
-            )}
-          </PreviewCard>
+            </div>
+            <UrlLabel />
+          </div>
         );
 
       case "audio":
-        return (
-          <PreviewCard showUrl displayUrl={filename || "Audio file"}>
-            <IconPlaceholder icon={Music} />
-          </PreviewCard>
-        );
+        return <PlaceholderCard icon={Music} label={filename || "Audio"} displayUrl={url} />;
 
       case "file":
-        return (
-          <PreviewCard showUrl displayUrl={filename || "File"}>
-            <IconPlaceholder icon={FileText} />
-          </PreviewCard>
-        );
+        return <PlaceholderCard icon={FileText} label={filename || "File"} displayUrl={url} />;
 
       case "link":
       default:
-        return (
-          <PreviewCard showUrl>
-            <IconPlaceholder icon={Link2} />
-          </PreviewCard>
-        );
+        return <PlaceholderCard icon={Link2} displayUrl={url} />;
     }
   };
 
