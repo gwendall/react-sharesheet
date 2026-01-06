@@ -1,8 +1,21 @@
 # @gwendall/share-menu
 
-A beautiful, customizable share menu component for React applications with social media integrations.
+[![npm version](https://img.shields.io/npm/v/@gwendall/share-menu.svg)](https://www.npmjs.com/package/@gwendall/share-menu)
+[![npm downloads](https://img.shields.io/npm/dm/@gwendall/share-menu.svg)](https://www.npmjs.com/package/@gwendall/share-menu)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Installation
+A beautiful, fully customizable share menu component for React. Supports 15+ social platforms with a modern drawer UI, CSS variable theming, and headless mode for complete control.
+
+## ✨ Features
+
+- 🎨 **Fully themeable** — CSS variables + Tailwind class overrides
+- 🧩 **Headless mode** — Use the hook to build your own UI
+- 📱 **Mobile-first** — Beautiful drawer with native share API support
+- 🔧 **Customizable** — Hide/show platforms, custom labels & icons
+- 📦 **Tree-shakeable** — Import only what you need
+- 🌐 **15+ platforms** — WhatsApp, X, Telegram, Instagram, and more
+
+## 📦 Installation
 
 ```bash
 npm install @gwendall/share-menu
@@ -12,22 +25,18 @@ pnpm add @gwendall/share-menu
 yarn add @gwendall/share-menu
 ```
 
-### For GitHub Packages
+### Peer Dependencies
 
-Add to your `.npmrc`:
-
-```
-@gwendall:registry=https://npm.pkg.github.com
+```bash
+npm install react react-dom
 ```
 
-## Usage
+## 🚀 Quick Start
 
-### Full Drawer (with Vaul)
+### Full Drawer (recommended)
 
 ```tsx
 import { ShareMenuDrawer } from "@gwendall/share-menu";
-// or
-import { ShareMenuDrawer } from "@gwendall/share-menu/drawer";
 
 function App() {
   return (
@@ -35,8 +44,6 @@ function App() {
       title="Share this!"
       shareUrl="https://example.com"
       shareText="Check out this awesome page!"
-      downloadUrl="https://example.com/file.mp4"
-      downloadFilename="my-video.mp4"
     >
       <button>Share</button>
     </ShareMenuDrawer>
@@ -44,98 +51,421 @@ function App() {
 }
 ```
 
-### Content Only (for custom containers)
+### Content Only (for custom modals)
 
 ```tsx
-import { ShareMenuContent } from "@gwendall/share-menu";
-// or
 import { ShareMenuContent } from "@gwendall/share-menu/content";
 
-function CustomShareModal() {
+function CustomModal() {
   return (
-    <MyCustomModal>
+    <Dialog>
       <ShareMenuContent
-        title="Share"
         shareUrl="https://example.com"
         shareText="Check this out!"
       />
-    </MyCustomModal>
+    </Dialog>
   );
 }
 ```
 
-## Props
+### Headless (full control)
 
-### ShareMenuContent
+```tsx
+import { useShareMenu } from "@gwendall/share-menu/headless";
+
+function CustomShareUI() {
+  const {
+    canNativeShare,
+    copied,
+    copyLink,
+    nativeShare,
+    shareWhatsApp,
+    shareX,
+  } = useShareMenu({
+    shareUrl: "https://example.com",
+    shareText: "Check this out!",
+  });
+
+  return (
+    <div className="flex gap-2">
+      {canNativeShare && <button onClick={nativeShare}>Share</button>}
+      <button onClick={copyLink}>{copied ? "Copied!" : "Copy"}</button>
+      <button onClick={shareWhatsApp}>WhatsApp</button>
+      <button onClick={shareX}>X</button>
+    </div>
+  );
+}
+```
+
+## 🎨 Theming
+
+### CSS Variables
+
+Override these variables to match your theme:
+
+```css
+:root {
+  /* Drawer */
+  --share-menu-overlay-bg: rgba(0, 0, 0, 0.7);
+  --share-menu-drawer-bg: #09090b;
+  --share-menu-drawer-border: #27272a;
+  --share-menu-handle-bg: #27272a;
+  
+  /* Typography */
+  --share-menu-title-color: #ffffff;
+  --share-menu-subtitle-color: #a1a1aa;
+  --share-menu-button-label-color: #ffffff;
+  
+  /* Platform colors (optional - defaults to brand colors) */
+  --share-menu-whatsapp-bg: #25D366;
+  --share-menu-telegram-bg: #229ED9;
+  /* ... see full list below */
+}
+
+/* Dark/Light mode support */
+.dark {
+  --share-menu-drawer-bg: #0a0a0a;
+}
+
+.light {
+  --share-menu-drawer-bg: #ffffff;
+  --share-menu-title-color: #09090b;
+}
+```
+
+<details>
+<summary>All CSS Variables</summary>
+
+```css
+/* Drawer */
+--share-menu-overlay-bg: rgba(0, 0, 0, 0.7);
+--share-menu-drawer-bg: #09090b;
+--share-menu-drawer-border: #27272a;
+--share-menu-handle-bg: #27272a;
+
+/* Typography */
+--share-menu-title-color: #ffffff;
+--share-menu-subtitle-color: #a1a1aa;
+--share-menu-button-label-color: #ffffff;
+
+/* Platform backgrounds */
+--share-menu-native-share-bg: #7c3aed;
+--share-menu-copy-bg: #3b82f6;
+--share-menu-download-bg: #ef4444;
+--share-menu-whatsapp-bg: #25D366;
+--share-menu-telegram-bg: #229ED9;
+--share-menu-instagram-bg: #E1306C;
+--share-menu-facebook-bg: #1877F2;
+--share-menu-snapchat-bg: #FFFC00;
+--share-menu-sms-bg: #22c55e;
+--share-menu-email-bg: #f97316;
+--share-menu-linkedin-bg: #0A66C2;
+--share-menu-reddit-bg: #FF4500;
+--share-menu-x-bg: rgba(255, 255, 255, 0.1);
+--share-menu-tiktok-bg: rgba(255, 255, 255, 0.1);
+--share-menu-threads-bg: rgba(255, 255, 255, 0.1);
+```
+
+</details>
+
+### Tailwind Class Overrides
+
+Override any part of the component with `classNames`:
+
+```tsx
+<ShareMenuDrawer
+  shareUrl="..."
+  shareText="..."
+  classNames={{
+    // Drawer
+    overlay: "bg-black/80 backdrop-blur-sm",
+    drawer: "bg-background rounded-t-3xl",
+    drawerInner: "p-6",
+    handle: "bg-muted",
+    
+    // Content
+    root: "max-w-lg",
+    header: "mb-6",
+    title: "text-3xl font-bold text-foreground",
+    subtitle: "text-muted-foreground",
+    grid: "gap-6",
+    button: "w-20",
+    buttonIcon: "rounded-xl shadow-lg",
+    buttonLabel: "font-medium",
+  }}
+>
+```
+
+## ⚙️ API Reference
+
+### Props
+
+#### ShareMenuContent / ShareMenuDrawer
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `title` | `string` | `"Share"` | Title displayed at the top |
-| `shareUrl` | `string` | required | URL to share |
-| `shareText` | `string` | required | Text to share alongside the URL |
-| `downloadUrl` | `string \| null` | - | Optional URL for download functionality |
-| `downloadFilename` | `string` | - | Filename for downloaded file |
-| `className` | `string` | - | Custom class name for the container |
-| `onNativeShare` | `() => void` | - | Called when native share is triggered |
-| `onCopy` | `() => void` | - | Called when link is copied |
-| `onDownload` | `() => void` | - | Called when download starts |
+| `shareUrl` | `string` | **required** | URL to share |
+| `shareText` | `string` | **required** | Text to share |
+| `downloadUrl` | `string` | — | URL for download button |
+| `downloadFilename` | `string` | — | Filename for download |
+| `className` | `string` | — | Class for root container |
+| `classNames` | `object` | — | Override sub-component classes |
+| `buttonSize` | `number` | `45` | Button size in pixels |
+| `iconSize` | `number` | `22` | Icon size in pixels |
+| `show` | `ShareOption[]` | — | Only show these platforms |
+| `hide` | `ShareOption[]` | — | Hide these platforms |
+| `labels` | `object` | — | Custom button labels |
+| `icons` | `object` | — | Custom button icons |
+| `onNativeShare` | `() => void` | — | Native share callback |
+| `onCopy` | `() => void` | — | Copy callback |
+| `onDownload` | `() => void` | — | Download callback |
 
-### ShareMenuDrawer
-
-Includes all props from `ShareMenuContent` plus:
+#### ShareMenuDrawer (additional)
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `disabled` | `boolean` | `false` | Whether the drawer is disabled |
-| `children` | `ReactNode` | required | Trigger element for the drawer |
-| `open` | `boolean` | - | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `children` | `ReactNode` | **required** | Trigger element |
+| `disabled` | `boolean` | `false` | Disable the trigger |
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
 
-## Utility Functions
+### ShareOption
 
-You can also import individual share functions for custom implementations:
+Available platform identifiers:
 
-```tsx
-import {
-  shareToWhatsApp,
-  shareToTelegram,
-  shareToX,
-  shareToFacebook,
-  shareToLinkedIn,
-  shareToReddit,
-  shareToSnapchat,
-  shareViaSMS,
-  shareViaEmail,
-  openInstagram,
-  openTikTok,
-  openThreads,
-} from "@gwendall/share-menu";
+```ts
+type ShareOption =
+  | "native"    // Native share API
+  | "copy"      // Copy to clipboard
+  | "download"  // Download file
+  | "whatsapp"
+  | "telegram"
+  | "instagram"
+  | "facebook"
+  | "snapchat"
+  | "sms"
+  | "email"
+  | "linkedin"
+  | "reddit"
+  | "x"
+  | "tiktok"
+  | "threads";
 ```
 
-## Supported Platforms
+### useShareMenu Hook
 
-- Native Share (Web Share API)
-- Copy Link
-- Download
-- WhatsApp
-- Telegram
-- Instagram
-- Facebook
-- Snapchat
-- SMS
-- Email
-- LinkedIn
-- Reddit
-- X (Twitter)
-- TikTok
-- Threads
+```ts
+const {
+  canNativeShare,  // boolean - browser supports native share
+  copied,          // boolean - link was recently copied
+  downloading,     // boolean - download in progress
+  safeUrl,         // string - resolved share URL
+  
+  // Actions
+  copyLink,        // () => Promise<void>
+  nativeShare,     // () => Promise<void>
+  downloadFile,    // () => Promise<void>
+  
+  // Platform share functions
+  shareWhatsApp,   // () => void
+  shareTelegram,   // () => void
+  shareX,          // () => void
+  shareFacebook,   // () => void
+  shareInstagram,  // () => void
+  shareTikTok,     // () => void
+  shareThreads,    // () => void
+  shareSnapchat,   // () => void
+  shareSMS,        // () => void
+  shareEmail,      // () => void
+  shareLinkedIn,   // () => void
+  shareReddit,     // () => void
+} = useShareMenu({
+  shareUrl: string,
+  shareText: string,
+  downloadUrl?: string,
+  downloadFilename?: string,
+  emailSubject?: string,
+  onNativeShare?: () => void,
+  onCopy?: () => void,
+  onDownload?: () => void,
+});
+```
 
-## Requirements
+## 📦 Exports
+
+```ts
+// Everything
+import { 
+  ShareMenuDrawer, 
+  ShareMenuContent,
+  useShareMenu,
+  CSS_VARS,
+  CSS_VAR_DEFAULTS,
+  // Platform utilities
+  PLATFORMS,
+  PLATFORM_COLORS,
+  PLATFORM_ICONS,
+  PLATFORM_LABELS,
+  getPlatform,
+  getPlatformColor,
+  // Share functions
+  shareToWhatsApp,
+  shareToX,
+  // ...
+} from "@gwendall/share-menu";
+
+// Content only (smaller bundle)
+import { ShareMenuContent } from "@gwendall/share-menu/content";
+
+// Drawer only
+import { ShareMenuDrawer } from "@gwendall/share-menu/drawer";
+
+// Headless (smallest bundle - no UI components)
+import { 
+  useShareMenu, 
+  PLATFORM_COLORS,
+  PLATFORM_ICONS,
+  getPlatform,
+  shareToWhatsApp, 
+  shareToX,
+  // ...
+} from "@gwendall/share-menu/headless";
+```
+
+## 🎨 Platform Utilities
+
+Access platform colors, icons, and labels for custom UIs:
+
+```tsx
+import { 
+  PLATFORM_COLORS, 
+  PLATFORM_ICONS, 
+  PLATFORM_LABELS,
+  getPlatform,
+  getAllPlatforms,
+} from "@gwendall/share-menu";
+
+// Get all platforms
+const platforms = getAllPlatforms();
+// [{ id: "whatsapp", label: "WhatsApp", colors: {...}, Icon: ... }, ...]
+
+// Get single platform
+const whatsapp = getPlatform("whatsapp");
+// { id: "whatsapp", label: "WhatsApp", colors: { bg: "#25D366", text: "#fff" }, Icon: ... }
+
+// Use colors directly
+const bgColor = PLATFORM_COLORS.whatsapp.bg; // "#25D366"
+const textColor = PLATFORM_COLORS.whatsapp.text; // "#ffffff"
+
+// Use icons
+const WhatsAppIcon = PLATFORM_ICONS.whatsapp;
+<WhatsAppIcon size={24} className="text-white" />
+
+// Use labels
+const label = PLATFORM_LABELS.whatsapp; // "WhatsApp"
+```
+
+### Build a custom share button
+
+```tsx
+import { getPlatform, shareToWhatsApp } from "@gwendall/share-menu";
+
+function WhatsAppButton({ url, text }: { url: string; text: string }) {
+  const { colors, Icon, label } = getPlatform("whatsapp");
+  
+  return (
+    <button
+      onClick={() => shareToWhatsApp(url, text)}
+      style={{ backgroundColor: colors.bg, color: colors.text }}
+    >
+      <Icon size={20} />
+      {label}
+    </button>
+  );
+}
+```
+
+## 🛠 Examples
+
+### Filter platforms
+
+```tsx
+// Show only specific platforms
+<ShareMenuContent
+  shareUrl="..."
+  shareText="..."
+  show={["copy", "whatsapp", "telegram", "x"]}
+/>
+
+// Hide specific platforms
+<ShareMenuContent
+  shareUrl="..."
+  shareText="..."
+  hide={["tiktok", "snapchat", "threads"]}
+/>
+```
+
+### Custom labels
+
+```tsx
+<ShareMenuContent
+  shareUrl="..."
+  shareText="..."
+  labels={{
+    copy: "Copy Link",
+    native: "More options...",
+    whatsapp: "Send via WhatsApp",
+  }}
+/>
+```
+
+### With download
+
+```tsx
+<ShareMenuDrawer
+  shareUrl="https://example.com/post/123"
+  shareText="Check out my video!"
+  downloadUrl="https://example.com/video.mp4"
+  downloadFilename="my-video.mp4"
+>
+  <button>Share</button>
+</ShareMenuDrawer>
+```
+
+### Controlled state
+
+```tsx
+function ControlledExample() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>Open Share Menu</button>
+      <ShareMenuDrawer
+        open={open}
+        onOpenChange={setOpen}
+        shareUrl="..."
+        shareText="..."
+      >
+        <span /> {/* Hidden trigger */}
+      </ShareMenuDrawer>
+    </>
+  );
+}
+```
+
+## 📋 Requirements
 
 - React 18+
-- Tailwind CSS (for styling)
+- Tailwind CSS (for default styling)
 
-## License
+> **Note:** If you're not using Tailwind, you can either use the headless hook to build your own UI, or override all classes via `classNames`.
 
-MIT
+## 🤝 Contributing
 
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+MIT © [Gwendall Esnault](https://github.com/gwendall)

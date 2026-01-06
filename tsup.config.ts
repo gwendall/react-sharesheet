@@ -5,6 +5,7 @@ export default defineConfig({
     index: "src/index.ts",
     content: "src/content.ts",
     drawer: "src/drawer.ts",
+    headless: "src/headless.ts",
   },
   format: ["cjs", "esm"],
   dts: true,
