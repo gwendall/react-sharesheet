@@ -1,7 +1,7 @@
-# sharesheet
+# react-sharesheet
 
-[![npm version](https://img.shields.io/npm/v/sharesheet.svg)](https://www.npmjs.com/package/sharesheet)
-[![npm downloads](https://img.shields.io/npm/dm/sharesheet.svg)](https://www.npmjs.com/package/sharesheet)
+[![npm version](https://img.shields.io/npm/v/react-sharesheet.svg)](https://www.npmjs.com/package/react-sharesheet)
+[![npm downloads](https://img.shields.io/npm/dm/react-sharesheet.svg)](https://www.npmjs.com/package/react-sharesheet)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A beautiful, fully customizable share sheet component for React. Supports 15+ social platforms with a modern drawer UI, CSS variable theming, and headless mode for complete control.
@@ -18,11 +18,11 @@ A beautiful, fully customizable share sheet component for React. Supports 15+ so
 ## 📦 Installation
 
 ```bash
-npm install sharesheet
+npm install react-sharesheet
 # or
-pnpm add sharesheet
+pnpm add react-sharesheet
 # or
-yarn add sharesheet
+yarn add react-sharesheet
 ```
 
 ### Peer Dependencies
@@ -40,7 +40,7 @@ Add the package to your `tailwind.config.js` content array:
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/sharesheet/dist/**/*.{js,mjs}", // 👈 Add this
+    "./node_modules/react-sharesheet/dist/**/*.{js,mjs}", // 👈 Add this
   ],
   // ...
 }
@@ -51,7 +51,7 @@ module.exports = {
 ### Full Drawer (recommended)
 
 ```tsx
-import { ShareSheetDrawer } from "sharesheet";
+import { ShareSheetDrawer } from "react-sharesheet";
 
 function App() {
   return (
@@ -69,7 +69,7 @@ function App() {
 ### Content Only (for custom modals)
 
 ```tsx
-import { ShareSheetContent } from "sharesheet/content";
+import { ShareSheetContent } from "react-sharesheet/content";
 
 function CustomModal() {
   return (
@@ -86,7 +86,7 @@ function CustomModal() {
 ### Headless (full control)
 
 ```tsx
-import { useShareSheet } from "sharesheet/headless";
+import { useShareSheet } from "react-sharesheet/headless";
 
 function CustomShareUI() {
   const {
@@ -405,13 +405,13 @@ import {
   shareToWhatsApp,
   shareToX,
   // ...
-} from "sharesheet";
+} from "react-sharesheet";
 
 // Content only (smaller bundle)
-import { ShareSheetContent } from "sharesheet/content";
+import { ShareSheetContent } from "react-sharesheet/content";
 
 // Drawer only
-import { ShareSheetDrawer } from "sharesheet/drawer";
+import { ShareSheetDrawer } from "react-sharesheet/drawer";
 
 // Headless (smallest bundle - no UI components)
 import { 
@@ -422,7 +422,7 @@ import {
   shareToWhatsApp, 
   shareToX,
   // ...
-} from "sharesheet/headless";
+} from "react-sharesheet/headless";
 ```
 
 ## 🎨 Platform Utilities
@@ -436,7 +436,7 @@ import {
   PLATFORM_LABELS,
   getPlatform,
   getAllPlatforms,
-} from "sharesheet";
+} from "react-sharesheet";
 
 // Get all platforms
 const platforms = getAllPlatforms();
@@ -461,7 +461,7 @@ const label = PLATFORM_LABELS.whatsapp; // "WhatsApp"
 ### Build a custom share button
 
 ```tsx
-import { getPlatform, shareToWhatsApp } from "sharesheet";
+import { getPlatform, shareToWhatsApp } from "react-sharesheet";
 
 function WhatsAppButton({ url, text }: { url: string; text: string }) {
   const { colors, Icon, label } = getPlatform("whatsapp");
@@ -563,7 +563,7 @@ If you're upgrading from `@gwendall/share-menu`:
 import { ShareMenuDrawer, ShareMenuContent, useShareMenu } from "@gwendall/share-menu";
 
 // New imports (backwards compatible aliases available)
-import { ShareSheetDrawer, ShareSheetContent, useShareSheet } from "sharesheet";
+import { ShareSheetDrawer, ShareSheetContent, useShareSheet } from "react-sharesheet";
 
 // CSS variables changed from --share-menu-* to --sharesheet-*
 // Old: --share-menu-drawer-bg
