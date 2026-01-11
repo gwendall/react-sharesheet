@@ -23,16 +23,20 @@ export default function AppleIcon() {
           borderRadius: 40,
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            fontSize: 80,
-          }}
+        {/* Share arrow icon */}
+        <svg
+          width="90"
+          height="90"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          📤
-        </div>
+          <path d="M12 5v10M12 5l-4 4M12 5l4 4" />
+          <path d="M5 17h14" />
+        </svg>
       </div>
     ),
     {

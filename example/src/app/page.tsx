@@ -17,31 +17,14 @@ export default function Home() {
       </div>
 
       {/* Demo Card */}
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-6">
-        {/* Preview */}
-        <div className="space-y-3">
-          <div className="aspect-video bg-gradient-to-br from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center">
-            <span className="text-white text-2xl font-bold">gwendall.com</span>
-          </div>
-          <div className="space-y-1">
-            <h2 className="text-xl font-semibold text-white">
-              Gwendall Esnault
-            </h2>
-            <p className="text-zinc-400 text-sm">
-              Entrepreneur & Developer. Building cool stuff on the internet.
-            </p>
-          </div>
-        </div>
-
-        {/* Share Button */}
+      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
         <ShareSheetDrawer
-          title="Share this profile"
           shareUrl="https://gwendall.com"
-          shareText="Check out Gwendall's website! 🚀"
+          shareText="Check this out"
           hide={["download"]}
         >
           <button className="w-full py-3 px-4 bg-white text-black font-semibold rounded-xl hover:bg-zinc-200 transition-colors cursor-pointer">
-            Share
+            Share gwendall.com
           </button>
         </ShareSheetDrawer>
       </div>
@@ -53,7 +36,7 @@ export default function Home() {
           <h3 className="font-medium text-zinc-300">Minimal</h3>
           <ShareSheetDrawer
             shareUrl="https://gwendall.com"
-            shareText="Check out gwendall.com!"
+            shareText="Check this out"
           >
             <button className="w-full py-2 px-3 bg-zinc-800 text-white text-sm rounded-lg hover:bg-zinc-700 transition-colors cursor-pointer">
               Share Link
@@ -67,7 +50,7 @@ export default function Home() {
           <ShareSheetDrawer
             title="Share on social"
             shareUrl="https://gwendall.com"
-            shareText="Just found this cool website! 🔥"
+            shareText="Check this out"
             show={["x", "whatsapp", "telegram", "copy"]}
           >
             <button className="w-full py-2 px-3 bg-zinc-800 text-white text-sm rounded-lg hover:bg-zinc-700 transition-colors cursor-pointer">
@@ -82,7 +65,7 @@ export default function Home() {
           <ShareSheetDrawer
             title="Invite a friend"
             shareUrl="https://gwendall.com"
-            shareText="Hey, check out Gwendall's site!"
+            shareText="Check this out"
             labels={{
               copy: "Copy URL",
               whatsapp: "Send via WhatsApp",
@@ -102,7 +85,7 @@ export default function Home() {
           <ShareSheetDrawer
             title="Share repo"
             shareUrl="https://github.com/gwendall/react-sharesheet"
-            shareText="Check out this React library!"
+            shareText="Check out this React library"
             hide={["download", "tiktok", "snapchat"]}
           >
             <button className="w-full py-2 px-3 bg-zinc-800 text-white text-sm rounded-lg hover:bg-zinc-700 transition-colors cursor-pointer">

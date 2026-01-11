@@ -62,24 +62,6 @@ export async function generateOGImage(
           fontFamily: FONT_FAMILY,
         }}
       >
-        {/* Decorative share icons background */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            opacity: 0.03,
-            fontSize: 400,
-          }}
-        >
-          📤
-        </div>
-
         {/* Main content */}
         <div
           style={{
@@ -101,10 +83,22 @@ export async function generateOGImage(
               borderRadius: 24,
               background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accentLight} 100%)`,
               marginBottom: 40,
-              fontSize: 56,
             }}
           >
-            📤
+            {/* Share arrow icon */}
+            <svg
+              width="56"
+              height="56"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 5v10M12 5l-4 4M12 5l4 4" />
+              <path d="M5 17h14" />
+            </svg>
           </div>
 
           {/* Title */}

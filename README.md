@@ -7,18 +7,18 @@
 
 A beautiful, fully customizable share sheet component for React. Supports 15+ social platforms with a modern drawer UI, CSS variable theming, and headless mode for complete control.
 
-**[🚀 Live Demo](https://react-sharesheet.vercel.app)**
+**[→ Live Demo](https://react-sharesheet.vercel.app)**
 
-## ✨ Features
+## Features
 
-- 🎨 **Fully themeable** — CSS variables + Tailwind class overrides
-- 🧩 **Headless mode** — Use the hook to build your own UI
-- 📱 **Mobile-first** — Beautiful drawer with native share API support
-- 🔧 **Customizable** — Hide/show platforms, custom labels & icons
-- 📦 **Tree-shakeable** — Import only what you need
-- 🌐 **15+ platforms** — WhatsApp, X, Telegram, Instagram, and more
+- **Fully themeable** — CSS variables + Tailwind class overrides
+- **Headless mode** — Use the hook to build your own UI
+- **Mobile-first** — Beautiful drawer with native share API support
+- **Customizable** — Hide/show platforms, custom labels & icons
+- **Tree-shakeable** — Import only what you need
+- **15+ platforms** — WhatsApp, X, Telegram, Instagram, and more
 
-## 📦 Installation
+## Installation
 
 ```bash
 npm install react-sharesheet
@@ -43,13 +43,13 @@ Add the package to your `tailwind.config.js` content array:
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/react-sharesheet/dist/**/*.{js,mjs}", // 👈 Add this
+    "./node_modules/react-sharesheet/dist/**/*.{js,mjs}", // <-- Add this
   ],
   // ...
 }
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Full Drawer (recommended)
 
@@ -115,7 +115,7 @@ function CustomShareUI() {
 }
 ```
 
-## 🖼️ Automatic Link Preview
+## Automatic Link Preview
 
 The share sheet automatically fetches Open Graph (OG) metadata from the `shareUrl` and displays a rich preview — just like Twitter, Telegram, and other platforms do when you paste a link.
 
@@ -168,7 +168,7 @@ interface OGData {
 }
 ```
 
-## 🎨 Theming
+## Theming
 
 ### CSS Variables
 
@@ -275,7 +275,7 @@ Override any part of the component with `classNames`:
 >
 ```
 
-## ⚙️ API Reference
+## API Reference
 
 ### Props
 
@@ -371,7 +371,7 @@ const {
 });
 ```
 
-## 📦 Exports
+## Exports
 
 ```ts
 // Everything
@@ -412,7 +412,7 @@ import {
 } from "react-sharesheet/headless";
 ```
 
-## 🎨 Platform Utilities
+## Platform Utilities
 
 Access platform colors, icons, and labels for custom UIs:
 
@@ -465,7 +465,7 @@ function WhatsAppButton({ url, text }: { url: string; text: string }) {
 }
 ```
 
-## 🛠 Examples
+## Examples
 
 ### Filter platforms
 
@@ -534,35 +534,17 @@ function ControlledExample() {
 }
 ```
 
-## 📋 Requirements
+## Requirements
 
 - React 18+
 - Tailwind CSS (for default styling)
 
 > **Note:** If you're not using Tailwind, you can use the headless hook to build your own UI, or override all classes via `classNames`.
 
-## 🔄 Migration from v0.x
-
-If you're upgrading from `@gwendall/share-menu`:
-
-```tsx
-// Old imports
-import { ShareMenuDrawer, ShareMenuContent, useShareMenu } from "@gwendall/share-menu";
-
-// New imports (backwards compatible aliases available)
-import { ShareSheetDrawer, ShareSheetContent, useShareSheet } from "react-sharesheet";
-
-// CSS variables changed from --share-menu-* to --sharesheet-*
-// Old: --share-menu-drawer-bg
-// New: --sharesheet-drawer-bg
-```
-
-Legacy exports (`ShareMenuDrawer`, `ShareMenuContent`, `useShareMenu`) are still available but deprecated.
-
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
+## License
 
 MIT © [Gwendall](https://github.com/gwendall)
