@@ -263,19 +263,22 @@ export async function generateOGImage(
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 6,
-                marginLeft: 4,
+                justifyContent: "center",
+                width: 48,
+                height: 48,
+                borderRadius: 12,
+                background: `${theme.muted}30`,
+                gap: 5,
               }}
             >
               {[1, 2, 3].map((_, i) => (
                 <div
                   key={i}
                   style={{
-                    width: 8,
-                    height: 8,
+                    width: 4,
+                    height: 4,
                     borderRadius: "50%",
                     background: theme.muted,
-                    opacity: 0.5,
                   }}
                 />
               ))}
