@@ -126,6 +126,8 @@ export interface ShareSheetContentProps {
   hide?: ShareOption[];
   /** Show only specific share options */
   show?: ShareOption[];
+  /** Custom order for share options (buttons will appear in this order) */
+  order?: ShareOption[];
   /** Custom labels for buttons */
   labels?: Partial<Record<ShareOption, string>>;
   /** Custom icons for buttons */
