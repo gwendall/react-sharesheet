@@ -1,6 +1,4 @@
 import { ImageResponse } from "next/og";
-import { FaWhatsapp, FaTelegramPlane, FaFacebookF, FaInstagram, FaLinkedin } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 
 // Theme configuration
 const THEME: "light" | "dark" = "dark";
