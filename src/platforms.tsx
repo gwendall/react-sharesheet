@@ -2,12 +2,12 @@
 
 import type { ReactNode } from "react";
 import {
-  Download,
-  Link as LinkIcon,
-  Mail,
-  MessageCircle,
-  Send,
-} from "lucide-react";
+  LuDownload,
+  LuLink,
+  LuMail,
+  LuMessageCircle,
+  LuSend,
+} from "react-icons/lu";
 import {
   FaFacebookF,
   FaInstagram,
@@ -101,16 +101,16 @@ export const PLATFORM_LABELS: Record<ShareOption, string> = {
 
 /** Platform icons - React components (SOURCE OF TRUTH) */
 export const PLATFORM_ICONS: Record<ShareOption, (props: { size?: number; className?: string }) => ReactNode> = {
-  native: ({ size = 22, className }) => <Send size={size} className={className} />,
-  copy: ({ size = 22, className }) => <LinkIcon size={size} className={className} />,
-  download: ({ size = 22, className }) => <Download size={size} className={className} />,
+  native: ({ size = 22, className }) => <LuSend size={size} className={className} />,
+  copy: ({ size = 22, className }) => <LuLink size={size} className={className} />,
+  download: ({ size = 22, className }) => <LuDownload size={size} className={className} />,
   whatsapp: ({ size = 22, className }) => <FaWhatsapp size={size} className={className} />,
   telegram: ({ size = 22, className }) => <FaTelegramPlane size={size} className={className} />,
   instagram: ({ size = 22, className }) => <FaInstagram size={size} className={className} />,
   facebook: ({ size = 22, className }) => <FaFacebookF size={size} className={className} />,
   snapchat: ({ size = 22, className }) => <FaSnapchat size={size} className={className} />,
-  sms: ({ size = 22, className }) => <MessageCircle size={size} className={className} />,
-  email: ({ size = 22, className }) => <Mail size={size} className={className} />,
+  sms: ({ size = 22, className }) => <LuMessageCircle size={size} className={className} />,
+  email: ({ size = 22, className }) => <LuMail size={size} className={className} />,
   linkedin: ({ size = 22, className }) => <FaLinkedin size={size} className={className} />,
   reddit: ({ size = 22, className }) => <FaReddit size={size} className={className} />,
   x: ({ size = 22, className }) => <FaXTwitter size={size} className={className} />,

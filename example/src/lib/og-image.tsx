@@ -69,7 +69,6 @@ export async function generateOGImage(
             flexDirection: "column",
             alignItems: "center",
             textAlign: "center",
-            zIndex: 1,
           }}
         >
           {/* Logo/Icon with subtle glow ring */}
@@ -250,7 +249,9 @@ export async function generateOGImage(
                 height: 48,
                 borderRadius: 12,
                 background: "#000000",
-                border: "1px solid #333",
+                borderWidth: 1,
+                borderStyle: "solid",
+                borderColor: "#333",
               }}
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="white">

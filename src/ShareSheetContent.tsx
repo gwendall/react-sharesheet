@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
-import { Image, Link2 } from "lucide-react";
+import { LuImage, LuLink2 } from "react-icons/lu";
 import { cn } from "./utils";
 import { useShareSheet, useOGData } from "./hooks";
 import {
@@ -199,7 +199,7 @@ export function ShareSheetContent({
                 }}
               />
             </div>
-            <Link2 size={32} style={{ color: textColor, opacity: 0.4 }} />
+            <LuLink2 size={32} style={{ color: textColor, opacity: 0.4 }} />
           </div>
         </div>
       );
@@ -233,7 +233,7 @@ export function ShareSheetContent({
                 padding: "16px",
               }}
             >
-              <Link2 size={32} style={{ color: textColor, opacity: 0.4 }} />
+              <LuLink2 size={32} style={{ color: textColor, opacity: 0.4 }} />
               {ogData?.title && (
                 <span 
                   style={{ 
@@ -286,7 +286,7 @@ export function ShareSheetContent({
                 }}
               />
             </div>
-            <Image size={32} style={{ color: textColor, opacity: 0.4 }} />
+            <LuImage size={32} style={{ color: textColor, opacity: 0.4 }} />
           </div>
           {/* Hidden image for preloading */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
