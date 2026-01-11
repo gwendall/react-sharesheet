@@ -97,32 +97,13 @@ export interface ShareSheetDrawerClassNames extends ShareSheetContentClassNames 
   trigger?: string;
 }
 
-/** Preview content type */
-export type PreviewType = "image" | "video" | "audio" | "file" | "link" | "auto";
-
-/** Preview configuration */
-export interface PreviewConfig {
-  /** URL of the content to preview */
-  url: string;
-  /** Type of content (auto-detected if not provided) */
-  type?: PreviewType;
-  /** Filename to display (for file/audio types) */
-  filename?: string;
-  /** Alt text for images */
-  alt?: string;
-  /** Poster image for videos */
-  poster?: string;
-}
-
 export interface ShareSheetContentProps {
   /** Title displayed at the top of the sheet */
   title?: string;
-  /** URL to share */
+  /** URL to share (OG preview will be fetched automatically) */
   shareUrl: string;
   /** Text to share alongside the URL */
   shareText: string;
-  /** Preview of content being shared (string URL or config object) */
-  preview?: string | PreviewConfig | null;
   /** Optional URL for download functionality */
   downloadUrl?: string | null;
   /** Filename for downloaded file */

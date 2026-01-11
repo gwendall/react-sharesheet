@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
-import { Image, FileText, Music, Film, Link2, Play } from "lucide-react";
+import { Image, Link2 } from "lucide-react";
 import { cn } from "./utils";
-import { useShareSheet } from "./hooks";
+import { useShareSheet, useOGData } from "./hooks";
 import {
   PLATFORM_IDS,
   PLATFORM_COLORS,
@@ -17,48 +17,10 @@ import {
   type ShareSheetContentProps,
   type ShareOption,
   type ShareButtonConfig,
-  type PreviewConfig,
-  type PreviewType,
 } from "./types";
 
 const DEFAULT_BUTTON_SIZE = 45;
 const DEFAULT_ICON_SIZE = 22;
-
-// File extension mappings
-const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp", "ico", "avif"];
-const VIDEO_EXTENSIONS = ["mp4", "webm", "mov", "avi", "mkv", "m4v", "ogv"];
-const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg", "m4a", "aac", "flac", "wma"];
-
-// Detect content type from URL
-function detectPreviewType(url: string): PreviewType {
-  try {
-    const pathname = new URL(url, "http://localhost").pathname;
-    const ext = pathname.split(".").pop()?.toLowerCase() || "";
-    
-    if (IMAGE_EXTENSIONS.includes(ext)) return "image";
-    if (VIDEO_EXTENSIONS.includes(ext)) return "video";
-    if (AUDIO_EXTENSIONS.includes(ext)) return "audio";
-    
-    // Check for common patterns
-    if (url.includes("/api/og") || url.includes("og-image")) return "image";
-    if (url.includes("youtube.com") || url.includes("vimeo.com")) return "video";
-    
-    return "link";
-  } catch {
-    return "link";
-  }
-}
-
-// Get filename from URL
-function getFilenameFromUrl(url: string): string {
-  try {
-    const pathname = new URL(url, "http://localhost").pathname;
-    const filename = pathname.split("/").pop() || "";
-    return decodeURIComponent(filename);
-  } catch {
-    return url;
-  }
-}
 
 // Default class names
 const defaultClasses = {
@@ -69,12 +31,8 @@ const defaultClasses = {
   preview: "flex justify-center mb-4 px-4",
   previewSkeleton: "rounded-xl overflow-hidden",
   previewImage: "",
-  previewVideo: "",
-  previewFile: "",
-  previewFileIcon: "",
-  previewFilename: "truncate",
-  previewLink: "",
-  grid: "px-2 py-6 flex flex-row items-center gap-4 gap-y-6 flex-wrap justify-center",
+  previewMeta: "",
+  grid: "px-2 py-6 flex flex-row items-start gap-4 gap-y-6 flex-wrap justify-center",
   button: "flex flex-col items-center gap-0 text-xs w-[60px] outline-none cursor-pointer group",
   buttonIcon: "p-2 rounded-full transition-all flex items-center justify-center group-hover:scale-110 group-active:scale-95 mb-2",
   buttonLabel: "",
@@ -93,34 +51,10 @@ function cssVar(name: string, fallback: string): string {
   return `var(${name}, ${fallback})`;
 }
 
-// Normalize preview prop to PreviewConfig
-function normalizePreview(preview: string | PreviewConfig | null | undefined): PreviewConfig | null {
-  if (!preview) return null;
-  
-  if (typeof preview === "string") {
-    const type = detectPreviewType(preview);
-    return {
-      url: preview,
-      type,
-      filename: getFilenameFromUrl(preview),
-    };
-  }
-  
-  // It's already a config object
-  const type = preview.type === "auto" || !preview.type ? detectPreviewType(preview.url) : preview.type;
-  
-  return {
-    ...preview,
-    type,
-    filename: preview.filename || getFilenameFromUrl(preview.url),
-  };
-}
-
 export function ShareSheetContent({
   title = "Share",
   shareUrl,
   shareText,
-  preview,
   downloadUrl,
   downloadFilename,
   className,
@@ -135,19 +69,19 @@ export function ShareSheetContent({
   labels = {},
   icons = {},
 }: ShareSheetContentProps) {
-  const [mediaLoaded, setMediaLoaded] = useState(false);
-  const [mediaError, setMediaError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
-  const handleMediaLoad = useCallback(() => {
-    setMediaLoaded(true);
+  // Fetch OG data automatically from shareUrl
+  const { ogData, loading: ogLoading } = useOGData(shareUrl);
+
+  const handleImageLoad = useCallback(() => {
+    setImageLoaded(true);
   }, []);
 
-  const handleMediaError = useCallback(() => {
-    setMediaError(true);
+  const handleImageError = useCallback(() => {
+    setImageError(true);
   }, []);
-
-  // Normalize preview config
-  const previewConfig = useMemo(() => normalizePreview(preview), [preview]);
 
   const shareSheet = useShareSheet({
     shareUrl,
@@ -219,60 +153,33 @@ export function ShareSheetContent({
     });
   }, [buttons, show, hide]);
 
-  const showPreview = !!previewConfig;
+  const bgColor = cssVar(CSS_VARS_UI.previewBg, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.previewBg]);
+  const shimmerColor = cssVar(CSS_VARS_UI.previewShimmer, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.previewShimmer]);
+  const textColor = cssVar(CSS_VARS_UI.subtitleColor, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.subtitleColor]);
 
-  // Render preview based on type
+  // Render OG preview
   const renderPreview = () => {
-    if (!previewConfig) return null;
+    const ogImage = ogData?.image;
+    const hasImage = ogImage && !imageError;
 
-    const { type, url, filename, alt, poster } = previewConfig;
-    const bgColor = cssVar(CSS_VARS_UI.previewBg, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.previewBg]);
-    const shimmerColor = cssVar(CSS_VARS_UI.previewShimmer, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.previewShimmer]);
-    const textColor = cssVar(CSS_VARS_UI.subtitleColor, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.subtitleColor]);
-
-    // Floating URL label (centered below)
-    const UrlLabel = ({ displayUrl = url }: { displayUrl?: string }) => (
-      <div
-        className={cn(defaultClasses.previewFilename, classNames.previewFilename)}
-        style={{ 
-          color: textColor, 
-          fontSize: "10px",
-          opacity: 0.5,
-          textAlign: "center",
-          marginTop: "6px",
-        }}
-      >
-        {displayUrl}
-      </div>
-    );
-
-    // Placeholder card for non-media types or loading/error states
-    const PlaceholderCard = ({ 
-      icon: IconComponent, 
-      isLoading = false,
-      label,
-      displayUrl,
-    }: { 
-      icon: typeof Link2; 
-      isLoading?: boolean;
-      label?: string;
-      displayUrl?: string;
-    }) => (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div
-          className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
-          style={{
-            position: "relative",
-            backgroundColor: bgColor,
-            width: "200px",
-            height: "120px",
-            overflow: "hidden",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {isLoading && (
+    // Loading state
+    if (ogLoading) {
+      return (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+          <div
+            className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
+            style={{
+              position: "relative",
+              backgroundColor: bgColor,
+              width: "100%",
+              maxWidth: "320px",
+              aspectRatio: "1.91 / 1",
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
               <div
                 style={{
@@ -283,194 +190,127 @@ export function ShareSheetContent({
                 }}
               />
             </div>
-          )}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
-            }}
-          >
-            <IconComponent size={32} style={{ color: textColor, opacity: 0.4 }} />
-            {label && (
-              <span style={{ color: textColor, fontSize: "11px", opacity: 0.4 }}>
-                {label}
-              </span>
-            )}
+            <Link2 size={32} style={{ color: textColor, opacity: 0.4 }} />
           </div>
         </div>
-        <UrlLabel displayUrl={displayUrl} />
-      </div>
-    );
-
-    // If there was an error loading media, show fallback
-    if (mediaError && (type === "image" || type === "video")) {
-      return <PlaceholderCard icon={Link2} displayUrl={url} />;
+      );
     }
 
-    switch (type) {
-      case "image":
-        // Show placeholder while loading, then show image with correct aspect ratio
-        if (!mediaLoaded) {
-          return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <div
-                className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
-                style={{
-                  position: "relative",
-                  backgroundColor: bgColor,
-                  width: "200px",
-                  height: "120px",
-                  overflow: "hidden",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
-                      animation: "sharesheet-shimmer 1.5s infinite",
-                    }}
-                  />
-                </div>
-                <Image size={32} style={{ color: textColor, opacity: 0.4 }} />
-              </div>
-              <UrlLabel />
-              {/* Hidden image for preloading */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={url}
-                alt={alt || "Preview"}
-                onLoad={handleMediaLoad}
-                onError={handleMediaError}
-                style={{ display: "none" }}
-              />
-            </div>
-          );
-        }
-        // Image loaded - show with correct aspect ratio
-        return (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={url}
-              alt={alt || "Preview"}
-              className={cn(defaultClasses.previewImage, classNames.previewImage)}
+    // No OG data or no image - show link placeholder
+    if (!ogData || !hasImage) {
+      return (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+          <div
+            className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
+            style={{
+              position: "relative",
+              backgroundColor: bgColor,
+              width: "100%",
+              maxWidth: "320px",
+              aspectRatio: "1.91 / 1",
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div
               style={{
-                maxWidth: "100%",
-                maxHeight: "180px",
-                borderRadius: "12px",
-                opacity: 1,
-                transition: "opacity 0.3s ease-in-out",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                padding: "16px",
               }}
-            />
-            <UrlLabel />
-          </div>
-        );
-
-      case "video":
-        if (!mediaLoaded) {
-          return (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <div
-                className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
-                style={{
-                  position: "relative",
-                  backgroundColor: bgColor,
-                  width: "200px",
-                  height: "120px",
-                  overflow: "hidden",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
-                      animation: "sharesheet-shimmer 1.5s infinite",
-                    }}
-                  />
-                </div>
-                <Film size={32} style={{ color: textColor, opacity: 0.4 }} />
-              </div>
-              <UrlLabel />
-              {/* Hidden video for preloading */}
-              <video
-                src={url}
-                poster={poster}
-                onLoadedData={handleMediaLoad}
-                onError={handleMediaError}
-                style={{ display: "none" }}
-                muted
-                playsInline
-                preload="metadata"
-              />
+            >
+              <Link2 size={32} style={{ color: textColor, opacity: 0.4 }} />
+              {ogData?.title && (
+                <span 
+                  style={{ 
+                    color: textColor, 
+                    fontSize: "12px", 
+                    opacity: 0.6,
+                    textAlign: "center",
+                    maxWidth: "280px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                  }}
+                >
+                  {ogData.title}
+                </span>
+              )}
             </div>
-          );
-        }
-        // Video loaded
-        return (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden" }}>
-              <video
-                src={url}
-                poster={poster}
-                className={cn(defaultClasses.previewVideo, classNames.previewVideo)}
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "180px",
-                  display: "block",
-                }}
-                muted
-                playsInline
-                preload="metadata"
-              />
-              {/* Play icon overlay */}
+          </div>
+        </div>
+      );
+    }
+
+    // Image loading state
+    if (!imageLoaded) {
+      return (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+          <div
+            className={cn(defaultClasses.previewSkeleton, classNames.previewSkeleton)}
+            style={{
+              position: "relative",
+              backgroundColor: bgColor,
+              width: "100%",
+              maxWidth: "320px",
+              aspectRatio: "1.91 / 1",
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
               <div
                 style={{
                   position: "absolute",
                   inset: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  pointerEvents: "none",
+                  background: `linear-gradient(90deg, transparent, ${shimmerColor}, transparent)`,
+                  animation: "sharesheet-shimmer 1.5s infinite",
                 }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    borderRadius: "50%",
-                    padding: "10px",
-                  }}
-                >
-                  <Play size={20} fill="white" color="white" />
-                </div>
-              </div>
+              />
             </div>
-            <UrlLabel />
+            <Image size={32} style={{ color: textColor, opacity: 0.4 }} />
           </div>
-        );
-
-      case "audio":
-        return <PlaceholderCard icon={Music} label={filename || "Audio"} displayUrl={url} />;
-
-      case "file":
-        return <PlaceholderCard icon={FileText} label={filename || "File"} displayUrl={url} />;
-
-      case "link":
-      default:
-        return <PlaceholderCard icon={Link2} displayUrl={url} />;
+          {/* Hidden image for preloading */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={ogImage}
+            alt={ogData.title || "Preview"}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            style={{ display: "none" }}
+          />
+        </div>
+      );
     }
+
+    // Image loaded - show it
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={ogImage}
+          alt={ogData.title || "Preview"}
+          className={cn(defaultClasses.previewImage, classNames.previewImage)}
+          style={{
+            width: "100%",
+            maxWidth: "320px",
+            height: "auto",
+            borderRadius: "12px",
+            opacity: 1,
+            transition: "opacity 0.3s ease-in-out",
+          }}
+        />
+      </div>
+    );
   };
 
   return (
@@ -493,12 +333,10 @@ export function ShareSheetContent({
         </div>
       </div>
 
-      {/* Content Preview */}
-      {showPreview && (
-        <div className={cn(defaultClasses.preview, classNames.preview)}>
-          {renderPreview()}
-        </div>
-      )}
+      {/* OG Preview - always shown */}
+      <div className={cn(defaultClasses.preview, classNames.preview)}>
+        {renderPreview()}
+      </div>
 
       <div className={cn(defaultClasses.grid, classNames.grid)}>
         {visibleButtons.map((btn) => (
@@ -535,4 +373,3 @@ export function ShareSheetContent({
 // Legacy export for backwards compatibility
 /** @deprecated Use ShareSheetContent instead */
 export const ShareMenuContent = ShareSheetContent;
-

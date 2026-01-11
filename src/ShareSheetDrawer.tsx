@@ -10,8 +10,8 @@ import { CSS_VARS_UI, CSS_VAR_UI_DEFAULTS, type ShareSheetDrawerProps } from "./
 // Default class names for drawer
 const defaultDrawerClasses = {
   overlay: "fixed inset-0 z-[70]",
-  drawer: "flex flex-col rounded-t-[14px] h-[70%] mt-24 fixed bottom-0 left-0 right-0 z-[80] border-t outline-none",
-  drawerInner: "p-4 rounded-t-[14px] flex-1 overflow-auto",
+  drawer: "flex flex-col rounded-t-[14px] max-h-[90%] fixed bottom-0 left-0 right-0 z-[80] border-t outline-none",
+  drawerInner: "p-4 pb-8 rounded-t-[14px] overflow-auto",
   handle: "mx-auto w-12 h-1.5 shrink-0 rounded-full mb-6",
   trigger: "",
 };
@@ -25,7 +25,6 @@ export function ShareSheetDrawer({
   title = "Share",
   shareUrl,
   shareText,
-  preview,
   downloadUrl,
   downloadFilename,
   disabled,
@@ -97,7 +96,6 @@ export function ShareSheetDrawer({
               title={title}
               shareUrl={shareUrl}
               shareText={shareText}
-              preview={preview}
               downloadUrl={downloadUrl}
               downloadFilename={downloadFilename}
               className={className}

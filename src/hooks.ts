@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { getSafeUrl } from "./utils";
+import { fetchOGData, type OGData } from "./og-fetcher";
 import {
   shareToWhatsApp,
   shareToTelegram,
@@ -183,6 +184,53 @@ export function useShareSheet({
     shareLinkedIn,
     shareReddit,
   };
+}
+
+/**
+ * Hook to fetch OG (Open Graph) data from a URL.
+ * Automatically fetches and caches OG metadata for link previews.
+ */
+export function useOGData(url: string | undefined): {
+  ogData: OGData | null;
+  loading: boolean;
+  error: string | null;
+} {
+  const [ogData, setOgData] = useState<OGData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!url) {
+      setOgData(null);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    fetchOGData(url)
+      .then((data) => {
+        if (!cancelled) {
+          setOgData(data);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : "Failed to fetch OG data");
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [url]);
+
+  return { ogData, loading, error };
 }
 
 // Legacy export for backwards compatibility

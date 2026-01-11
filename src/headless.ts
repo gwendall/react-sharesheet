@@ -1,6 +1,9 @@
 // Headless exports - just the hook and utilities, no styled components
 
-export { useShareSheet, useShareMenu, type UseShareSheetOptions, type UseShareMenuOptions } from "./hooks";
+export { useShareSheet, useShareMenu, useOGData, type UseShareSheetOptions, type UseShareMenuOptions } from "./hooks";
+
+// OG Data fetcher
+export { fetchOGData, clearOGCache, type OGData } from "./og-fetcher";
 
 export {
   shareToWhatsApp,

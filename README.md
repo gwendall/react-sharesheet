@@ -3,8 +3,11 @@
 [![npm version](https://img.shields.io/npm/v/react-sharesheet.svg)](https://www.npmjs.com/package/react-sharesheet)
 [![npm downloads](https://img.shields.io/npm/dm/react-sharesheet.svg)](https://www.npmjs.com/package/react-sharesheet)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://react-sharesheet.vercel.app)
 
 A beautiful, fully customizable share sheet component for React. Supports 15+ social platforms with a modern drawer UI, CSS variable theming, and headless mode for complete control.
+
+**[🚀 Live Demo](https://react-sharesheet.vercel.app)**
 
 ## ✨ Features
 
@@ -112,73 +115,58 @@ function CustomShareUI() {
 }
 ```
 
-## 🖼️ Content Preview
+## 🖼️ Automatic Link Preview
 
-The share sheet can display a preview of the content being shared. It automatically detects the content type based on the URL and displays an appropriate preview.
-
-### Auto-detection
+The share sheet automatically fetches Open Graph (OG) metadata from the `shareUrl` and displays a rich preview — just like Twitter, Telegram, and other platforms do when you paste a link.
 
 ```tsx
-// Image preview (detected from extension)
-<ShareSheetDrawer preview="https://example.com/image.png" {...props} />
-
-// Video preview (detected from extension)
-<ShareSheetDrawer preview="https://example.com/video.mp4" {...props} />
-
-// Audio file (shows icon + filename)
-<ShareSheetDrawer preview="https://example.com/song.mp3" {...props} />
-
-// Link (shows link icon + URL)
-<ShareSheetDrawer preview="https://example.com/page" {...props} />
+<ShareSheetDrawer
+  shareUrl="https://gwendall.com"  // OG data fetched automatically!
+  shareText="Check out this site!"
+>
+  <button>Share</button>
+</ShareSheetDrawer>
 ```
 
-### Explicit Type
+The component will:
+1. Fetch OG metadata (title, description, image) from the URL
+2. Display a loading shimmer while fetching
+3. Show the OG image if available, or a placeholder with the page title
+
+### Using the OG Hook Directly
+
+You can also use the `useOGData` hook for custom implementations:
 
 ```tsx
-// Force image type (e.g., for API endpoints)
-<ShareSheetDrawer
-  preview={{ url: "/api/og?id=123", type: "image" }}
-  {...props}
-/>
+import { useOGData } from "react-sharesheet/headless";
 
-// Video with poster image
-<ShareSheetDrawer
-  preview={{
-    url: "https://example.com/video.mp4",
-    type: "video",
-    poster: "https://example.com/thumbnail.jpg"
-  }}
-  {...props}
-/>
+function CustomPreview({ url }: { url: string }) {
+  const { ogData, loading, error } = useOGData(url);
 
-// File with custom filename
-<ShareSheetDrawer
-  preview={{
-    url: "https://example.com/doc.pdf",
-    type: "file",
-    filename: "Report Q4 2024.pdf"
-  }}
-  {...props}
-/>
-```
+  if (loading) return <div>Loading...</div>;
+  if (!ogData) return <div>No preview available</div>;
 
-### PreviewConfig
-
-```ts
-interface PreviewConfig {
-  url: string;              // URL of the content
-  type?: PreviewType;       // "image" | "video" | "audio" | "file" | "link" | "auto"
-  filename?: string;        // Display name for file/audio types
-  alt?: string;             // Alt text for images
-  poster?: string;          // Poster image for videos
+  return (
+    <div>
+      {ogData.image && <img src={ogData.image} alt={ogData.title} />}
+      <h3>{ogData.title}</h3>
+      <p>{ogData.description}</p>
+    </div>
+  );
 }
 ```
 
-### Supported Formats
+### OGData Type
 
-- **Images**: jpg, jpeg, png, gif, webp, svg, bmp, ico, avif
-- **Videos**: mp4, webm, mov, avi, mkv, m4v, ogv
-- **Audio**: mp3, wav, ogg, m4a, aac, flac, wma
+```ts
+interface OGData {
+  title?: string;       // Page title
+  description?: string; // Page description
+  image?: string;       // OG image URL
+  url?: string;         // Canonical URL
+  siteName?: string;    // Site name
+}
+```
 
 ## 🎨 Theming
 
@@ -296,9 +284,8 @@ Override any part of the component with `classNames`:
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `title` | `string` | `"Share"` | Title displayed at the top |
-| `shareUrl` | `string` | **required** | URL to share |
+| `shareUrl` | `string` | **required** | URL to share (OG preview fetched automatically) |
 | `shareText` | `string` | **required** | Text to share |
-| `preview` | `string \| PreviewConfig` | — | Preview of content (see Preview section below) |
 | `downloadUrl` | `string` | — | URL for download button |
 | `downloadFilename` | `string` | — | Filename for download |
 | `className` | `string` | — | Class for root container |

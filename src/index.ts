@@ -3,7 +3,10 @@ export { ShareSheetContent, ShareMenuContent } from "./ShareSheetContent";
 export { ShareSheetDrawer, ShareMenuDrawer } from "./ShareSheetDrawer";
 
 // Headless hook
-export { useShareSheet, useShareMenu, type UseShareSheetOptions, type UseShareMenuOptions } from "./hooks";
+export { useShareSheet, useShareMenu, useOGData, type UseShareSheetOptions, type UseShareMenuOptions } from "./hooks";
+
+// OG Data fetcher
+export { fetchOGData, clearOGCache, type OGData } from "./og-fetcher";
 
 // Types
 export type {
@@ -21,8 +24,6 @@ export type {
   ShareButtonConfig,
   UseShareSheetReturn,
   UseShareMenuReturn,
-  PreviewType,
-  PreviewConfig,
 } from "./types";
 
 // CSS Variables for UI (drawer, title, etc.)
