@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "cd .. && pnpm build && cd example && next dev",
+    "build": "cd .. && pnpm build && cd example && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -12,7 +12,7 @@
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-sharesheet": "link:.."
+    "react-sharesheet": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
