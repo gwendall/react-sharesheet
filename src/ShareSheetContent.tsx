@@ -66,7 +66,6 @@ export function ShareSheetContent({
   onDownload,
   hide = [],
   show,
-  order,
   labels = {},
   icons = {},
 }: ShareSheetContentProps) {
@@ -152,30 +151,25 @@ export function ShareSheetContent({
   }, [iconSize, labels, icons, dynamicLabels, shareActions, shareSheet.canNativeShare, shareSheet.platformAvailability, downloadUrl]);
 
   const visibleButtons = useMemo(() => {
-    const filtered = buttons.filter((btn) => {
-      // Check condition (e.g., canNativeShare, downloadUrl exists)
+    // If show is provided, use its order
+    if (show && show.length > 0) {
+      return show
+        .map((id) => buttons.find((btn) => btn.id === id))
+        .filter((btn): btn is NonNullable<typeof btn> => {
+          if (!btn) return false;
+          if (btn.condition === false) return false;
+          if (hide.includes(btn.id)) return false;
+          return true;
+        });
+    }
+    
+    // Otherwise use default order with hide filtering
+    return buttons.filter((btn) => {
       if (btn.condition === false) return false;
-      // Filter by show list if provided
-      if (show && show.length > 0) return show.includes(btn.id);
-      // Filter by hide list
       if (hide.includes(btn.id)) return false;
       return true;
     });
-    
-    // Sort by custom order if provided
-    if (order && order.length > 0) {
-      return filtered.sort((a, b) => {
-        const indexA = order.indexOf(a.id);
-        const indexB = order.indexOf(b.id);
-        // Items not in order array go to the end
-        const sortA = indexA === -1 ? Infinity : indexA;
-        const sortB = indexB === -1 ? Infinity : indexB;
-        return sortA - sortB;
-      });
-    }
-    
-    return filtered;
-  }, [buttons, show, hide, order]);
+  }, [buttons, show, hide]);
 
   const bgColor = cssVar(CSS_VARS_UI.previewBg, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.previewBg]);
   const shimmerColor = cssVar(CSS_VARS_UI.previewShimmer, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.previewShimmer]);

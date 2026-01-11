@@ -313,9 +313,8 @@ Override any part of the component with `classNames`:
 | `classNames` | `object` | - | Override sub-component classes |
 | `buttonSize` | `number` | `45` | Button size in pixels |
 | `iconSize` | `number` | `22` | Icon size in pixels |
-| `show` | `ShareOption[]` | - | Only show these platforms |
+| `show` | `ShareOption[]` | - | Show only these platforms, in this exact order |
 | `hide` | `ShareOption[]` | - | Hide these platforms |
-| `order` | `ShareOption[]` | - | Custom order for platforms |
 | `labels` | `object` | - | Custom button labels |
 | `icons` | `object` | - | Custom button icons |
 | `onNativeShare` | `() => void` | - | Native share callback |
@@ -504,13 +503,6 @@ function WhatsAppButton({ url, text }: { url: string; text: string }) {
   shareUrl="..."
   shareText="..."
   hide={["tiktok", "snapchat", "threads"]}
-/>
-
-// Custom order
-<ShareSheetContent
-  shareUrl="..."
-  shareText="..."
-  order={["copy", "x", "whatsapp", "telegram", "email"]}
 />
 ```
 
