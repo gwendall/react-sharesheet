@@ -124,6 +124,18 @@ export function ShareSheetContent({
     return PLATFORM_IDS.map((id) => {
       const Icon = PLATFORM_ICONS[id];
       const defaultLabel = dynamicLabels[id] ?? PLATFORM_LABELS[id];
+      const availability = shareSheet.platformAvailability[id];
+      
+      // Determine if button should be shown based on various conditions
+      let condition = true;
+      if (id === "native") {
+        condition = shareSheet.canNativeShare;
+      } else if (id === "download") {
+        condition = !!downloadUrl;
+      } else if (!availability.available) {
+        // Hide unavailable platforms (mobile-only on desktop)
+        condition = false;
+      }
       
       return {
         id,
@@ -133,13 +145,10 @@ export function ShareSheetContent({
         bgColor: cssVar(PLATFORM_CSS_VARS[id], PLATFORM_COLORS[id].bg),
         textColor: PLATFORM_COLORS[id].text,
         onClick: shareActions[id],
-        // Conditions for showing certain buttons
-        condition: id === "native" ? shareSheet.canNativeShare
-          : id === "download" ? !!downloadUrl
-          : true,
+        condition,
       };
     });
-  }, [iconSize, labels, icons, dynamicLabels, shareActions, shareSheet.canNativeShare, downloadUrl]);
+  }, [iconSize, labels, icons, dynamicLabels, shareActions, shareSheet.canNativeShare, shareSheet.platformAvailability, downloadUrl]);
 
   const visibleButtons = useMemo(() => {
     return buttons.filter((btn) => {

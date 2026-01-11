@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback, useEffect } from "react";
-import { getSafeUrl } from "./utils";
+import { getSafeUrl, isMobileDevice, getAllPlatformAvailability } from "./utils";
 import { fetchOGData, type OGData } from "./og-fetcher";
 import {
   shareToWhatsApp,
@@ -57,6 +57,14 @@ export function useShareSheet({
 
   const canNativeShare = useMemo(() => {
     return typeof navigator !== "undefined" && "share" in navigator;
+  }, []);
+
+  const isMobile = useMemo(() => {
+    return isMobileDevice();
+  }, []);
+
+  const platformAvailability = useMemo(() => {
+    return getAllPlatformAvailability();
   }, []);
 
   const safeUrl = getSafeUrl(shareUrl);
@@ -168,6 +176,8 @@ export function useShareSheet({
     copied,
     downloading,
     safeUrl,
+    isMobile,
+    platformAvailability,
     copyLink,
     nativeShare,
     downloadFile,

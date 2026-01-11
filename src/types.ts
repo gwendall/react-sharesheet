@@ -156,6 +156,14 @@ export interface ShareButtonConfig {
   condition?: boolean;
 }
 
+/** Platform availability status */
+export interface PlatformAvailability {
+  /** Whether the platform is available on this device */
+  available: boolean;
+  /** Reason why platform is unavailable (if applicable) */
+  reason?: string;
+}
+
 /** Return type of useShareSheet hook */
 export interface UseShareSheetReturn {
   /** Whether the browser supports native share */
@@ -166,6 +174,10 @@ export interface UseShareSheetReturn {
   downloading: boolean;
   /** The safe URL (falls back to current page URL) */
   safeUrl: string;
+  /** Whether the current device is mobile */
+  isMobile: boolean;
+  /** Availability status for each platform */
+  platformAvailability: Record<ShareOption, PlatformAvailability>;
   /** Copy the share URL to clipboard */
   copyLink: () => Promise<void>;
   /** Trigger native share dialog */
@@ -180,15 +192,15 @@ export interface UseShareSheetReturn {
   shareX: () => void;
   /** Share to Facebook */
   shareFacebook: () => void;
-  /** Open Instagram app */
+  /** Open Instagram app (mobile only - will warn on desktop) */
   shareInstagram: () => void;
-  /** Open TikTok app */
+  /** Open TikTok app (mobile only - will warn on desktop) */
   shareTikTok: () => void;
-  /** Open Threads app */
+  /** Open Threads app (mobile only - will warn on desktop) */
   shareThreads: () => void;
   /** Share to Snapchat */
   shareSnapchat: () => void;
-  /** Share via SMS */
+  /** Share via SMS (mobile only - will warn on desktop) */
   shareSMS: () => void;
   /** Share via Email */
   shareEmail: () => void;

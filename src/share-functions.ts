@@ -1,4 +1,8 @@
-import { openUrl } from "./utils";
+import { 
+  openUrl, 
+  checkPlatformAvailability, 
+  warnUnavailablePlatform,
+} from "./utils";
 
 export function shareToWhatsApp(url: string, text: string) {
   const encoded = encodeURIComponent(`${text}\n${url}`);
@@ -23,14 +27,29 @@ export function shareToFacebook(url: string) {
 }
 
 export function openInstagram() {
+  const availability = checkPlatformAvailability("instagram");
+  if (!availability.available) {
+    warnUnavailablePlatform("instagram", availability.reason!);
+    // Still attempt to open - it may work on some desktop browsers with app installed
+  }
   window.location.href = "instagram://";
 }
 
 export function openTikTok() {
+  const availability = checkPlatformAvailability("tiktok");
+  if (!availability.available) {
+    warnUnavailablePlatform("tiktok", availability.reason!);
+    // Still attempt to open - it may work on some desktop browsers with app installed
+  }
   window.location.href = "tiktok://";
 }
 
 export function openThreads() {
+  const availability = checkPlatformAvailability("threads");
+  if (!availability.available) {
+    warnUnavailablePlatform("threads", availability.reason!);
+    // Still attempt to open - it may work on some desktop browsers with app installed
+  }
   window.location.href = "threads://";
 }
 
@@ -40,6 +59,11 @@ export function shareToSnapchat(url: string) {
 }
 
 export function shareViaSMS(url: string, text: string) {
+  const availability = checkPlatformAvailability("sms");
+  if (!availability.available) {
+    warnUnavailablePlatform("sms", availability.reason!);
+    // Still attempt to open - it may work on some devices
+  }
   const body = encodeURIComponent(`${text}\n${url}`);
   window.location.href = `sms:?body=${body}`;
 }

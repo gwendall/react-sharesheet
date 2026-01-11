@@ -5,18 +5,20 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://sharesheet.gwendall.com)
 
-A beautiful, fully customizable share sheet component for React. Supports 15+ social platforms with a modern drawer UI, CSS variable theming, and headless mode for complete control.
+A mobile-first share sheet for React with native share support, built-in Open Graph previews, and 15+ social platforms.
+
+Designed for modern React apps, react-sharesheet ships with a beautiful Tailwind-based drawer UI out of the box, while also exposing fully headless APIs for complete customization.
 
 **[→ Live Demo](https://sharesheet.gwendall.com)**
 
-## Features
+## Why react-sharesheet?
 
-- **Fully themeable** — CSS variables + Tailwind class overrides
-- **Headless mode** — Use the hook to build your own UI
-- **Mobile-first** — Beautiful drawer with native share API support
-- **Customizable** — Hide/show platforms, custom labels & icons
-- **Tree-shakeable** — Import only what you need
-- **15+ platforms** — WhatsApp, X, Telegram, Instagram, and more
+- 📱 **Mobile-first drawer UI** — feels native on iOS & Android
+- 🔗 **Native Web Share API** — fallback handled automatically
+- 🖼 **Built-in Open Graph previews** — no extra setup
+- 🧠 **Headless APIs** — build your own UI if needed
+- 🎨 **Themeable** — CSS variables + Tailwind class overrides
+- 🌍 **15+ social platforms** — WhatsApp, X, Telegram, Instagram, and more
 
 ## Installation
 
@@ -534,12 +536,23 @@ function ControlledExample() {
 }
 ```
 
+## Styling & Tailwind
+
+react-sharesheet ships with a Tailwind-based UI by default.
+
+Tailwind is **only required if you use the prebuilt components**.  
+If you don't use Tailwind, you can:
+
+- Use the **headless hook** to build your own UI
+- Override all styles via `classNames`
+- Use the exposed CSS variables
+
+This makes react-sharesheet easy to integrate into any React stack.
+
 ## Requirements
 
 - React 18+
-- Tailwind CSS (for default styling)
-
-> **Note:** If you're not using Tailwind, you can use the headless hook to build your own UI, or override all classes via `classNames`.
+- Tailwind CSS (only for prebuilt components)
 
 ## Contributing
 

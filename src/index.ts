@@ -24,6 +24,7 @@ export type {
   ShareButtonConfig,
   UseShareSheetReturn,
   UseShareMenuReturn,
+  PlatformAvailability,
 } from "./types";
 
 // CSS Variables for UI (drawer, title, etc.)
@@ -50,7 +51,21 @@ export {
 } from "./platforms";
 
 // Utility functions for custom implementations
-export { cn, openUrl, getSafeUrl } from "./utils";
+export { 
+  cn, 
+  openUrl, 
+  getSafeUrl,
+  // Device detection
+  isMobileDevice,
+  isIOSDevice,
+  isAndroidDevice,
+  // Platform availability
+  checkPlatformAvailability,
+  getAllPlatformAvailability,
+  warnUnavailablePlatform,
+  MOBILE_ONLY_PLATFORMS,
+  MOBILE_PREFERRED_PLATFORMS,
+} from "./utils";
 
 // Individual share functions
 export {

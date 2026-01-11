@@ -94,13 +94,8 @@ describe("useShareSheet", () => {
   });
 
   it("should use fallback URL when shareUrl is empty", () => {
-    // Mock window.location
-    const originalLocation = window.location;
-    Object.defineProperty(window, "location", {
-      value: { href: "https://current-page.com" },
-      writable: true,
-    });
-
+    // When shareUrl is empty, getSafeUrl falls back to window.location.href
+    // In jsdom, window.location.href defaults to "about:blank" or similar
     const { result } = renderHook(() =>
       useShareSheet({
         shareUrl: "",
@@ -108,13 +103,8 @@ describe("useShareSheet", () => {
       })
     );
 
-    expect(result.current.safeUrl).toBe("https://current-page.com");
-
-    // Restore
-    Object.defineProperty(window, "location", {
-      value: originalLocation,
-      writable: true,
-    });
+    // Should use the current window.location.href as fallback
+    expect(result.current.safeUrl).toBe(window.location.href);
   });
 });
 

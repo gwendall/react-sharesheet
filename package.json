@@ -1,7 +1,7 @@
 {
   "name": "react-sharesheet",
   "version": "1.1.0",
-  "description": "A beautiful share sheet component for React with social media integrations",
+  "description": "A mobile-first share sheet for React with native share support, Open Graph previews, 15+ social platforms, and headless APIs. Tailwind-styled by default, fully customizable.",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -57,12 +57,20 @@
   "keywords": [
     "share",
     "sharesheet",
-    "menu",
+    "share-sheet",
     "social",
     "react",
     "drawer",
-    "vaul",
-    "tailwind"
+    "native-share",
+    "web-share-api",
+    "open-graph",
+    "og-preview",
+    "whatsapp",
+    "telegram",
+    "twitter",
+    "headless",
+    "tailwind",
+    "mobile-first"
   ],
   "author": "Gwendall",
   "license": "MIT",
