@@ -3,11 +3,11 @@
 [![npm version](https://img.shields.io/npm/v/react-sharesheet.svg)](https://www.npmjs.com/package/react-sharesheet)
 [![npm downloads](https://img.shields.io/npm/dm/react-sharesheet.svg)](https://www.npmjs.com/package/react-sharesheet)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://react-sharesheet.vercel.app)
+[![Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://sharesheet.gwendall.com)
 
 A beautiful, fully customizable share sheet component for React. Supports 15+ social platforms with a modern drawer UI, CSS variable theming, and headless mode for complete control.
 
-**[→ Live Demo](https://react-sharesheet.vercel.app)**
+**[→ Live Demo](https://sharesheet.gwendall.com)**
 
 ## Features
 

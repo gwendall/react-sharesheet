@@ -6,7 +6,7 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
-  "homepage": "https://react-sharesheet.vercel.app",
+  "homepage": "https://sharesheet.gwendall.com",
   "bugs": {
     "url": "https://github.com/gwendall/react-sharesheet/issues"
   },

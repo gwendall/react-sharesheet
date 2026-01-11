@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const SITE_URL = "https://react-sharesheet.vercel.app";
+const SITE_URL = "https://sharesheet.gwendall.com";
 const SITE_NAME = "react-sharesheet";
 const SITE_DESCRIPTION =
   "A beautiful share sheet component for React with 15+ social platforms, CSS theming, and headless mode.";
