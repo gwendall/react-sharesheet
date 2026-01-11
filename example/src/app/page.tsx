@@ -1,8 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { ShareSheetDrawer } from "react-sharesheet";
+import { Copy, Check } from "lucide-react";
 
 export default function Home() {
+  const [copied, setCopied] = useState(false);
+
+  const copyNpmCommand = async () => {
+    await navigator.clipboard.writeText("npm i react-sharesheet");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-8 gap-12">
       {/* Header */}
@@ -11,9 +21,30 @@ export default function Home() {
           react-sharesheet
         </h1>
         <p className="text-zinc-400 text-lg">
-          A beautiful share sheet component for React with social media
-          integrations.
+          A mobile-first share sheet for React with native sharing and built-in
+          Open Graph previews.
         </p>
+        {/* Dev credibility signal */}
+        <div className="flex items-center justify-center gap-3 text-sm text-zinc-500">
+          <div className="flex items-center gap-2 px-2 py-1 bg-zinc-800/50 rounded-md">
+            <code className="font-mono text-zinc-400">
+              npm i react-sharesheet
+            </code>
+            <button
+              onClick={copyNpmCommand}
+              className="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer"
+              aria-label="Copy npm command"
+            >
+              {copied ? (
+                <Check className="w-3.5 h-3.5 text-green-500" />
+              ) : (
+                <Copy className="w-3.5 h-3.5" />
+              )}
+            </button>
+          </div>
+          <span className="text-zinc-600">·</span>
+          <span>MIT</span>
+        </div>
       </div>
 
       {/* Demo Card */}
@@ -27,6 +58,24 @@ export default function Home() {
             Share gwendall.com
           </button>
         </ShareSheetDrawer>
+      </div>
+
+      {/* Scroll hint */}
+      <div className="flex flex-col items-center gap-2 text-zinc-500 text-sm animate-pulse">
+        <span>Try the variants below</span>
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          />
+        </svg>
       </div>
 
       {/* More Examples */}
@@ -96,16 +145,35 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="text-center text-zinc-500 text-sm">
+      <footer className="text-center text-zinc-500 text-sm space-y-2 pt-8">
         <p>
-          View on{" "}
           <a
             href="https://github.com/gwendall/react-sharesheet"
             target="_blank"
             rel="noopener noreferrer"
             className="text-zinc-400 hover:text-white underline underline-offset-2"
           >
-            GitHub
+            View on GitHub
+          </a>
+          <span className="mx-2 text-zinc-600">·</span>
+          <a
+            href="https://www.npmjs.com/package/react-sharesheet"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-zinc-400 hover:text-white underline underline-offset-2"
+          >
+            npm
+          </a>
+        </p>
+        <p className="text-zinc-600">
+          Made by{" "}
+          <a
+            href="https://gwendall.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-zinc-500 hover:text-white"
+          >
+            gwendall
           </a>
         </p>
       </footer>

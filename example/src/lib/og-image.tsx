@@ -72,33 +72,46 @@ export async function generateOGImage(
             zIndex: 1,
           }}
         >
-          {/* Logo/Icon */}
+          {/* Logo/Icon with subtle glow ring */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              width: 120,
-              height: 120,
-              borderRadius: 24,
-              background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accentLight} 100%)`,
+              width: 140,
+              height: 140,
+              borderRadius: 32,
+              background: `radial-gradient(circle at center, ${theme.accent}30 0%, transparent 70%)`,
               marginBottom: 40,
             }}
           >
-            {/* Share arrow icon */}
-            <svg
-              width="56"
-              height="56"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="white"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 110,
+                height: 110,
+                borderRadius: 26,
+                background: `linear-gradient(135deg, ${theme.accent} 0%, ${theme.accentLight} 100%)`,
+                boxShadow: `0 0 60px ${theme.accent}50`,
+              }}
             >
-              <path d="M12 5v10M12 5l-4 4M12 5l4 4" />
-              <path d="M5 17h14" />
-            </svg>
+              {/* Share arrow icon */}
+              <svg
+                width="52"
+                height="52"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 5v10M12 5l-4 4M12 5l4 4" />
+                <path d="M5 17h14" />
+              </svg>
+            </div>
           </div>
 
           {/* Title */}
@@ -133,44 +146,52 @@ export async function generateOGImage(
             </div>
           )}
 
-          {/* Platform icons row */}
+          {/* Platform icons row - tighter spacing with ellipsis hint */}
           <div
             style={{
               display: "flex",
-              gap: 16,
+              alignItems: "center",
+              gap: 12,
               marginTop: 48,
             }}
           >
-            {["#25D366", "#229ED9", "#000000", "#1877F2", "#E1306C"].map(
+            {["#25D366", "#229ED9", "#1877F2", "#E1306C", "#FF4500", "#0A66C2"].map(
               (color, i) => (
                 <div
                   key={i}
                   style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 12,
+                    width: 44,
+                    height: 44,
+                    borderRadius: 11,
                     background: color,
-                    opacity: 0.8,
+                    opacity: 0.9,
                   }}
                 />
               )
             )}
+            {/* Ellipsis hint for "more platforms" */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                marginLeft: 4,
+              }}
+            >
+              {[1, 2, 3].map((_, i) => (
+                <div
+                  key={i}
+                  style={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    background: theme.muted,
+                    opacity: 0.5,
+                  }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 40,
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            color: theme.muted,
-            fontSize: 20,
-          }}
-        >
-          <span>github.com/gwendall/react-sharesheet</span>
         </div>
       </div>
     ),

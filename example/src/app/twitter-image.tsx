@@ -11,13 +11,13 @@ export const size = {
 
 export const contentType = "image/png";
 
-export const alt = "react-sharesheet - A beautiful share sheet component for React";
+export const alt = "react-sharesheet - Mobile-first React share sheet with native sharing";
 
 export default async function Image() {
   return generateOGImage(
     {
       title: "react-sharesheet",
-      subtitle: "A beautiful share sheet component for React with 15+ social platforms",
+      subtitle: "Mobile-first React share sheet with native sharing and Open Graph previews",
     },
     size
   );

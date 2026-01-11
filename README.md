@@ -13,12 +13,12 @@ Designed for modern React apps, react-sharesheet ships with a beautiful Tailwind
 
 ## Why react-sharesheet?
 
-- 📱 **Mobile-first drawer UI** — feels native on iOS & Android
-- 🔗 **Native Web Share API** — fallback handled automatically
-- 🖼 **Built-in Open Graph previews** — no extra setup
-- 🧠 **Headless APIs** — build your own UI if needed
-- 🎨 **Themeable** — CSS variables + Tailwind class overrides
-- 🌍 **15+ social platforms** — WhatsApp, X, Telegram, Instagram, and more
+- 📱 **Mobile-first drawer UI** - feels native on iOS & Android
+- 🔗 **Native Web Share API** - fallback handled automatically
+- 🖼 **Built-in Open Graph previews** - no extra setup
+- 🧠 **Headless APIs** - build your own UI if needed
+- 🎨 **Themeable** - CSS variables + Tailwind class overrides
+- 🌍 **15+ social platforms** - WhatsApp, X, Telegram, Instagram, and more
 
 ## Installation
 
@@ -119,7 +119,7 @@ function CustomShareUI() {
 
 ## Automatic Link Preview
 
-The share sheet automatically fetches Open Graph (OG) metadata from the `shareUrl` and displays a rich preview — just like Twitter, Telegram, and other platforms do when you paste a link.
+The share sheet automatically fetches Open Graph (OG) metadata from the `shareUrl` and displays a rich preview - just like Twitter, Telegram, and other platforms do when you paste a link.
 
 ```tsx
 <ShareSheetDrawer
@@ -288,19 +288,19 @@ Override any part of the component with `classNames`:
 | `title` | `string` | `"Share"` | Title displayed at the top |
 | `shareUrl` | `string` | **required** | URL to share (OG preview fetched automatically) |
 | `shareText` | `string` | **required** | Text to share |
-| `downloadUrl` | `string` | — | URL for download button |
-| `downloadFilename` | `string` | — | Filename for download |
-| `className` | `string` | — | Class for root container |
-| `classNames` | `object` | — | Override sub-component classes |
+| `downloadUrl` | `string` | - | URL for download button |
+| `downloadFilename` | `string` | - | Filename for download |
+| `className` | `string` | - | Class for root container |
+| `classNames` | `object` | - | Override sub-component classes |
 | `buttonSize` | `number` | `45` | Button size in pixels |
 | `iconSize` | `number` | `22` | Icon size in pixels |
-| `show` | `ShareOption[]` | — | Only show these platforms |
-| `hide` | `ShareOption[]` | — | Hide these platforms |
-| `labels` | `object` | — | Custom button labels |
-| `icons` | `object` | — | Custom button icons |
-| `onNativeShare` | `() => void` | — | Native share callback |
-| `onCopy` | `() => void` | — | Copy callback |
-| `onDownload` | `() => void` | — | Download callback |
+| `show` | `ShareOption[]` | - | Only show these platforms |
+| `hide` | `ShareOption[]` | - | Hide these platforms |
+| `labels` | `object` | - | Custom button labels |
+| `icons` | `object` | - | Custom button icons |
+| `onNativeShare` | `() => void` | - | Native share callback |
+| `onCopy` | `() => void` | - | Copy callback |
+| `onDownload` | `() => void` | - | Download callback |
 
 #### ShareSheetDrawer (additional)
 
@@ -308,8 +308,8 @@ Override any part of the component with `classNames`:
 |------|------|---------|-------------|
 | `children` | `ReactNode` | **required** | Trigger element |
 | `disabled` | `boolean` | `false` | Disable the trigger |
-| `open` | `boolean` | — | Controlled open state |
-| `onOpenChange` | `(open: boolean) => void` | — | Open state callback |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Open state callback |
 
 ### ShareOption
 
