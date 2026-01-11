@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ShareSheetDrawer, ShareSheetContent } from "react-sharesheet";
-import { Copy, Check } from "lucide-react";
+import { Copy, Check, Zap, Users, Tag, Github, Share } from "lucide-react";
 
 export default function Home() {
   const [copied, setCopied] = useState(false);
@@ -79,9 +79,10 @@ export default function Home() {
             shareText="Check this out"
             hide={["download"]}
           >
-            <button className="py-3 px-8 bg-white text-black font-semibold rounded-xl hover:bg-zinc-200 transition-colors cursor-pointer">
-              Open Share Sheet
-            </button>
+          <button className="py-3 px-8 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold rounded-xl hover:from-indigo-400 hover:to-purple-400 transition-colors duration-300 ease-out cursor-pointer flex items-center gap-2 shadow-lg shadow-indigo-500/25">
+            <Share className="w-4 h-4" />
+            Open Share Sheet
+          </button>
           </ShareSheetDrawer>
         </div>
 
@@ -107,7 +108,12 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
           {/* Minimal example */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 space-y-3">
-            <h3 className="font-medium text-zinc-300">Minimal</h3>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center">
+                <Zap className="w-4 h-4 text-zinc-500" />
+              </div>
+              <h3 className="font-medium text-zinc-300">Minimal</h3>
+            </div>
             <ShareSheetDrawer
               shareUrl="https://gwendall.com"
               shareText="Check this out"
@@ -120,7 +126,12 @@ export default function Home() {
 
           {/* Filtered platforms */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 space-y-3">
-            <h3 className="font-medium text-zinc-300">Social Only</h3>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center">
+                <Users className="w-4 h-4 text-zinc-500" />
+              </div>
+              <h3 className="font-medium text-zinc-300">Social Only</h3>
+            </div>
             <ShareSheetDrawer
               title="Share on social"
               shareUrl="https://gwendall.com"
@@ -135,7 +146,12 @@ export default function Home() {
 
           {/* Custom labels */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 space-y-3">
-            <h3 className="font-medium text-zinc-300">Custom Labels</h3>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center">
+                <Tag className="w-4 h-4 text-zinc-500" />
+              </div>
+              <h3 className="font-medium text-zinc-300">Custom Labels</h3>
+            </div>
             <ShareSheetDrawer
               title="Invite a friend"
               shareUrl="https://gwendall.com"
@@ -155,7 +171,12 @@ export default function Home() {
 
           {/* Different URL */}
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 space-y-3">
-            <h3 className="font-medium text-zinc-300">GitHub Repo</h3>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center">
+                <Github className="w-4 h-4 text-zinc-500" />
+              </div>
+              <h3 className="font-medium text-zinc-300">GitHub Repo</h3>
+            </div>
             <ShareSheetDrawer
               title="Share repo"
               shareUrl="https://github.com/gwendall/react-sharesheet"
