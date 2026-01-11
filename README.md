@@ -38,6 +38,17 @@ npm install react react-dom
 
 ### Tailwind CSS Setup
 
+#### Tailwind v4
+
+Add the package source to your CSS file:
+
+```css
+@import "tailwindcss";
+@source "../../node_modules/react-sharesheet/dist";
+```
+
+#### Tailwind v3
+
 Add the package to your `tailwind.config.js` content array:
 
 ```js

@@ -30,7 +30,7 @@ const defaultClasses = {
   subtitle: "mt-1 text-sm",
   preview: "flex justify-center mb-4 px-4",
   previewSkeleton: "rounded-xl overflow-hidden",
-  previewImage: "",
+  previewImage: "border border-white/10",
   previewMeta: "",
   grid: "px-2 py-6 flex flex-row items-start gap-4 gap-y-6 flex-wrap justify-center",
   button: "flex flex-col items-center gap-0 text-xs w-[60px] outline-none cursor-pointer group",
