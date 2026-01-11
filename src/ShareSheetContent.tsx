@@ -89,7 +89,7 @@ export function ShareSheetContent({
     shareText,
     downloadUrl,
     downloadFilename,
-    emailSubject: title,
+    emailSubject: shareText,
     onNativeShare,
     onCopy,
     onDownload,

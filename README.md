@@ -185,7 +185,7 @@ interface OGData {
 
 ### CSS Variables
 
-Override these variables to match your theme:
+Override these variables to match your theme. **Note:** Colors are applied via inline styles, so CSS variables are the only way to customize them (Tailwind classes won't override inline styles).
 
 ```css
 :root {
@@ -274,12 +274,20 @@ Override any part of the component with `classNames`:
     drawer: "bg-background rounded-t-3xl",
     drawerInner: "p-6",
     handle: "bg-muted",
+    trigger: "cursor-pointer",
     
     // Content
     root: "max-w-lg",
     header: "mb-6",
     title: "text-3xl font-bold text-foreground",
     subtitle: "text-muted-foreground",
+    
+    // Preview
+    preview: "mb-4",
+    previewSkeleton: "rounded-xl",
+    previewImage: "border border-white/10",
+    
+    // Buttons
     grid: "gap-6",
     button: "w-20",
     buttonIcon: "rounded-xl shadow-lg",
