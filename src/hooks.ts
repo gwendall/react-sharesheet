@@ -17,7 +17,27 @@ import {
   shareToLinkedIn,
   shareToReddit,
 } from "./share-functions";
-import type { UseShareSheetReturn } from "./types";
+import type { UseShareSheetReturn, PlatformAvailability, ShareOption } from "./types";
+
+// Default platform availability (assumes desktop/all platforms available)
+// This is used for SSR to avoid hydration mismatch
+const DEFAULT_PLATFORM_AVAILABILITY: Record<ShareOption, PlatformAvailability> = {
+  native: { available: true },
+  copy: { available: true },
+  download: { available: true },
+  whatsapp: { available: true },
+  telegram: { available: true },
+  instagram: { available: true },
+  facebook: { available: true },
+  snapchat: { available: true },
+  sms: { available: true },
+  email: { available: true },
+  linkedin: { available: true },
+  reddit: { available: true },
+  x: { available: true },
+  tiktok: { available: true },
+  threads: { available: true },
+};
 
 export interface UseShareSheetOptions {
   /** URL to share */
@@ -55,16 +75,19 @@ export function useShareSheet({
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
-  const canNativeShare = useMemo(() => {
-    return typeof navigator !== "undefined" && "share" in navigator;
-  }, []);
+  // Use state for values that depend on browser APIs to avoid hydration mismatch
+  // Initial values match what server renders (conservative defaults)
+  const [canNativeShare, setCanNativeShare] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [platformAvailability, setPlatformAvailability] = useState<Record<ShareOption, PlatformAvailability>>(
+    DEFAULT_PLATFORM_AVAILABILITY
+  );
 
-  const isMobile = useMemo(() => {
-    return isMobileDevice();
-  }, []);
-
-  const platformAvailability = useMemo(() => {
-    return getAllPlatformAvailability();
+  // Detect browser capabilities after mount (client-side only)
+  useEffect(() => {
+    setCanNativeShare(typeof navigator !== "undefined" && "share" in navigator);
+    setIsMobile(isMobileDevice());
+    setPlatformAvailability(getAllPlatformAvailability());
   }, []);
 
   const safeUrl = getSafeUrl(shareUrl);

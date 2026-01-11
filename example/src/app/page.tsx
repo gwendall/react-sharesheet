@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ShareSheetDrawer } from "react-sharesheet";
+import { ShareSheetDrawer, ShareSheetContent } from "react-sharesheet";
 import { Copy, Check } from "lucide-react";
 
 export default function Home() {
@@ -47,22 +47,39 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Demo Card */}
-      <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl p-6">
+      {/* Preview - Shows the component without interaction */}
+      <div className="w-full max-w-sm">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-t-3xl p-6 pb-8">
+          {/* Drawer handle */}
+          <div className="flex justify-center mb-4">
+            <div className="w-10 h-1 bg-zinc-700 rounded-full" />
+          </div>
+          <ShareSheetContent
+            title="Share"
+            shareUrl="https://gwendall.com"
+            shareText="Check out this awesome site!"
+            hide={["download"]}
+          />
+        </div>
+      </div>
+
+      {/* CTA to try it */}
+      <div className="text-center space-y-4">
+        <p className="text-zinc-500 text-sm">Click to try it yourself</p>
         <ShareSheetDrawer
           shareUrl="https://gwendall.com"
           shareText="Check this out"
           hide={["download"]}
         >
-          <button className="w-full py-3 px-4 bg-white text-black font-semibold rounded-xl hover:bg-zinc-200 transition-colors cursor-pointer">
-            Share gwendall.com
+          <button className="py-3 px-8 bg-white text-black font-semibold rounded-xl hover:bg-zinc-200 transition-colors cursor-pointer">
+            Open Share Sheet
           </button>
         </ShareSheetDrawer>
       </div>
 
       {/* Scroll hint */}
       <div className="flex flex-col items-center gap-2 text-zinc-500 text-sm animate-pulse">
-        <span>Try the variants below</span>
+        <span>More variants below</span>
         <svg
           className="w-4 h-4"
           fill="none"
