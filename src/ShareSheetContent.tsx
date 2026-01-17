@@ -38,11 +38,18 @@ const defaultClasses = {
   buttonLabel: "",
 };
 
-// Shimmer keyframes as inline style
+// Shimmer and fade-in keyframes as inline style
 const shimmerKeyframes = `
 @keyframes sharesheet-shimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
+}
+@keyframes sharesheet-fadein {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.sharesheet-fadein {
+  animation: sharesheet-fadein 0.3s ease-out forwards;
 }
 `;
 
@@ -310,21 +317,19 @@ export function ShareSheetContent({
       );
     }
 
-    // Image loaded - show it
+    // Image loaded - show it with fade-in
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={ogImage}
           alt={ogData.title || "Preview"}
-          className={cn(defaultClasses.previewImage, classNames.previewImage)}
+          className={cn(defaultClasses.previewImage, classNames.previewImage, "sharesheet-fadein")}
           style={{
             width: "100%",
             maxWidth: "320px",
             height: "auto",
             borderRadius: "12px",
-            opacity: 1,
-            transition: "opacity 0.3s ease-in-out",
           }}
         />
       </div>
