@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Drawer } from "vaul";
 
 import { cn } from "./utils";
@@ -20,6 +20,19 @@ const defaultDrawerClasses = {
 function cssVar(name: string, fallback: string): string {
   return `var(${name}, ${fallback})`;
 }
+
+// Screen reader only styles (inline to avoid Tailwind dependency)
+const srOnlyStyle: React.CSSProperties = {
+  position: "absolute",
+  width: "1px",
+  height: "1px",
+  padding: 0,
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  borderWidth: 0,
+};
 
 export function ShareSheetDrawer({
   title = "Share",
@@ -78,7 +91,7 @@ export function ShareSheetDrawer({
             borderColor: cssVar(CSS_VARS_UI.drawerBorder, CSS_VAR_UI_DEFAULTS[CSS_VARS_UI.drawerBorder]),
           }}
         >
-          <Drawer.Title className="sr-only">{title}</Drawer.Title>
+          <Drawer.Title style={srOnlyStyle}>{title}</Drawer.Title>
           <div
             className={cn(defaultDrawerClasses.drawerInner, classNames.drawerInner)}
             style={{
