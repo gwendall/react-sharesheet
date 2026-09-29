@@ -65,6 +65,7 @@ export function ShareSheetContent({
   downloadUrl,
   downloadFilename,
   previewImage,
+  fetchPreview,
   shareFile,
   shareFilename,
   className,
@@ -83,8 +84,9 @@ export function ShareSheetContent({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  // Only fetch OG data if previewImage is not provided
-  const { ogData, loading: ogLoading } = useOGData(previewImage ? undefined : shareUrl);
+  // Only look the link up when there is no previewImage and the caller opted in: the lookup
+  // sends shareUrl somewhere else
+  const { ogData, loading: ogLoading } = useOGData(previewImage || !fetchPreview ? undefined : shareUrl, fetchPreview);
 
   const handleImageLoad = useCallback(() => {
     setImageLoaded(true);

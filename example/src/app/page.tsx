@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ShareSheetDrawer, ShareSheetContent } from "react-sharesheet";
+import { ShareSheetDrawer, ShareSheetContent, fetchOGData } from "react-sharesheet";
 import { Copy, Check, Zap, Users, Tag, Github, Share } from "lucide-react";
 
 export default function Home() {
@@ -62,6 +62,7 @@ export default function Home() {
             <ShareSheetContent
               title="Share"
               shareUrl="https://gwendall.com"
+              fetchPreview={fetchOGData}
               shareText="Check out this awesome site!"
               hide={["download"]}
             />
@@ -76,6 +77,7 @@ export default function Home() {
           <p className="text-zinc-500 text-sm">Click to try it yourself</p>
           <ShareSheetDrawer
             shareUrl="https://gwendall.com"
+            fetchPreview={fetchOGData}
             shareText="Check this out"
             hide={["download"]}
           >
@@ -116,6 +118,7 @@ export default function Home() {
             </div>
             <ShareSheetDrawer
               shareUrl="https://gwendall.com"
+              fetchPreview={fetchOGData}
               shareText="Check this out"
             >
               <button className="w-full py-2 px-3 bg-zinc-800 text-white text-sm rounded-lg hover:bg-zinc-700 transition-colors cursor-pointer">
@@ -135,6 +138,7 @@ export default function Home() {
             <ShareSheetDrawer
               title="Share on social"
               shareUrl="https://gwendall.com"
+              fetchPreview={fetchOGData}
               shareText="Check this out"
               show={["x", "whatsapp", "telegram", "copy"]}
             >
@@ -155,6 +159,7 @@ export default function Home() {
             <ShareSheetDrawer
               title="Invite a friend"
               shareUrl="https://gwendall.com"
+              fetchPreview={fetchOGData}
               shareText="Check this out"
               labels={{
                 copy: "Copy URL",
@@ -180,6 +185,7 @@ export default function Home() {
             <ShareSheetDrawer
               title="Share repo"
               shareUrl="https://github.com/gwendall/react-sharesheet"
+              fetchPreview={fetchOGData}
               shareText="Check out this React library"
               hide={["download", "tiktok", "snapchat"]}
             >

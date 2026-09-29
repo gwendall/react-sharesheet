@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import { getSafeUrl, isMobileDevice, getAllPlatformAvailability } from "./utils";
-import { fetchOGData, type OGData } from "./og-fetcher";
+import { fetchOGData, type OGData, type OGFetcher } from "./og-fetcher";
 import {
   shareToWhatsApp,
   shareToTelegram,
@@ -279,9 +279,10 @@ export function useShareSheet({
 
 /**
  * Hook to fetch OG (Open Graph) data from a URL.
- * Automatically fetches and caches OG metadata for link previews.
+ * Fetches with `fetcher`, the Microlink lookup (`fetchOGData`, cached) unless another is given:
+ * calling this hook is the opt-in, since the lookup sends `url` to a third party.
  */
-export function useOGData(url: string | undefined): {
+export function useOGData(url: string | undefined, fetcher: OGFetcher = fetchOGData): {
   ogData: OGData | null;
   loading: boolean;
   error: string | null;
@@ -289,6 +290,12 @@ export function useOGData(url: string | undefined): {
   const [ogData, setOgData] = useState<OGData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Read at fetch time, so an inline fetcher does not refetch on every render
+  // (this effect runs before the one below in the same commit)
+  const fetcherRef = useRef(fetcher);
+  useEffect(() => {
+    fetcherRef.current = fetcher;
+  });
 
   useEffect(() => {
     if (!url) {
@@ -302,7 +309,7 @@ export function useOGData(url: string | undefined): {
     setLoading(true);
     setError(null);
 
-    fetchOGData(url)
+    fetcherRef.current(url)
       .then((data) => {
         if (!cancelled) {
           setOgData(data);

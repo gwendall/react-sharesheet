@@ -1,4 +1,6 @@
-// OG Data fetcher using Microlink API (free, no API key required)
+// OG data fetcher using the Microlink API (free, no API key required).
+// The sheet never calls it on its own: a caller opts in with `fetchPreview={fetchOGData}`,
+// because the lookup sends the shared link to a third party.
 
 export interface OGData {
   title?: string;
@@ -7,6 +9,9 @@ export interface OGData {
   url?: string;
   siteName?: string;
 }
+
+/** Looks up a link's card. Resolves to null when there is none. */
+export type OGFetcher = (url: string) => Promise<OGData | null>;
 
 export interface OGFetchResult {
   data: OGData | null;

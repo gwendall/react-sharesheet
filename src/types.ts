@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { OGFetcher } from "./og-fetcher";
 
 /** CSS variable names for UI elements (non-platform specific) */
 export const CSS_VARS_UI = {
@@ -100,7 +101,7 @@ export interface ShareSheetDrawerClassNames extends ShareSheetContentClassNames 
 export interface ShareSheetContentProps {
   /** Title displayed at the top of the sheet */
   title?: string;
-  /** URL to share (OG preview will be fetched automatically) */
+  /** URL to share */
   shareUrl: string;
   /** Text to share alongside the URL */
   shareText: string;
@@ -110,6 +111,12 @@ export interface ShareSheetContentProps {
   downloadFilename?: string;
   /** Custom preview image URL (skips OG fetching if provided) */
   previewImage?: string | null;
+  /**
+   * Looks up the link's card when there is no `previewImage`. Unset (the default), no request
+   * leaves the page and the sheet shows a link placeholder. Pass `fetchOGData` for the Microlink
+   * lookup the sheet made by itself before 1.10.0: it sends `shareUrl` to api.microlink.io.
+   */
+  fetchPreview?: OGFetcher;
   /** File to share via native share (data URL or Blob) - takes priority over URL sharing */
   shareFile?: string | Blob | null;
   /** Filename for the shared file */

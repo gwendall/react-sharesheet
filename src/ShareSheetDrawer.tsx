@@ -66,6 +66,7 @@ export function ShareSheetDrawer({
   downloadUrl,
   downloadFilename,
   previewImage,
+  fetchPreview,
   shareFile,
   shareFilename,
   disabled,
@@ -136,6 +137,7 @@ export function ShareSheetDrawer({
               downloadUrl={downloadUrl}
               downloadFilename={downloadFilename}
               previewImage={previewImage}
+              fetchPreview={fetchPreview}
               shareFile={shareFile}
               shareFilename={shareFilename}
               className={className}

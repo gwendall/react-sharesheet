@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://sharesheet.gwendall.com)
 
-A mobile-first share sheet for React with native share support, built-in Open Graph previews, and 15+ social platforms.
+A mobile-first share sheet for React with native share support, link previews, and 15+ social platforms.
 
 Designed for modern React apps, react-sharesheet ships with a beautiful Tailwind-based drawer UI out of the box, while also exposing fully headless APIs for complete customization.
 
@@ -15,7 +15,7 @@ Designed for modern React apps, react-sharesheet ships with a beautiful Tailwind
 
 - 📱 **Mobile-first drawer UI** - feels native on iOS & Android
 - 🔗 **Native Web Share API** - fallback handled automatically
-- 🖼 **Built-in Open Graph previews** - no extra setup
+- 🖼 **Link previews** - your own image, or an Open Graph lookup you opt into (no request leaves the page by default)
 - 🧠 **Headless APIs** - build your own UI if needed
 - 🎨 **Themeable** - CSS variables + Tailwind class overrides
 - 🌍 **15+ social platforms** - WhatsApp, X, Telegram, Instagram, and more
@@ -133,27 +133,61 @@ function CustomShareUI() {
 }
 ```
 
-## Automatic Link Preview
+## Link Preview
 
-The share sheet automatically fetches Open Graph (OG) metadata from the `shareUrl` and displays a rich preview - just like Twitter, Telegram, and other platforms do when you paste a link.
+The sheet shows a preview card above the buttons. Give it the image yourself with `previewImage`
+(a URL or a data URL): it is shown as is, and nothing is fetched.
 
 ```tsx
 <ShareSheetDrawer
-  shareUrl="https://gwendall.com"  // OG data fetched automatically!
+  shareUrl="https://gwendall.com"
   shareText="Check out this site!"
+  previewImage="https://gwendall.com/og.png"
 >
   <button>Share</button>
 </ShareSheetDrawer>
 ```
 
-The component will:
-1. Fetch OG metadata (title, description, image) from the URL
-2. Display a loading shimmer while fetching
-3. Show the OG image if available, or a placeholder with the page title
+Without `previewImage`, the sheet sends the link nowhere and shows a link placeholder. To look the
+link's Open Graph card up instead, opt in with `fetchPreview`:
+
+```tsx
+import { ShareSheetDrawer, fetchOGData } from "react-sharesheet";
+
+<ShareSheetDrawer
+  shareUrl="https://gwendall.com"
+  shareText="Check out this site!"
+  fetchPreview={fetchOGData}  // asks api.microlink.io for the card of shareUrl
+>
+  <button>Share</button>
+</ShareSheetDrawer>
+```
+
+`fetchOGData` asks [Microlink](https://microlink.io) (free, no key), which means the link you share
+is sent to a third party: keep it for public links. Any `(url) => Promise<OGData | null>` works, for
+example one that asks your own server:
+
+```tsx
+<ShareSheetDrawer
+  shareUrl={url}
+  shareText="Check out this site!"
+  fetchPreview={(u) => fetch(`/api/og?url=${encodeURIComponent(u)}`).then((r) => r.json())}
+>
+  <button>Share</button>
+</ShareSheetDrawer>
+```
+
+With a fetcher, the sheet shows a loading shimmer, then the card's image if it has one, or a
+placeholder with the page title.
+
+> **Changed in 1.10.0.** Before 1.10.0 the sheet called Microlink by itself whenever `previewImage`
+> was missing. It no longer does: pass `fetchPreview={fetchOGData}` to keep the old behavior.
 
 ### Using the OG Hook Directly
 
-You can also use the `useOGData` hook for custom implementations:
+You can also use the `useOGData` hook for custom implementations. It fetches through Microlink
+(`fetchOGData`, cached per URL) unless you pass your own fetcher as the second argument: calling the
+hook is the opt-in.
 
 ```tsx
 import { useOGData } from "react-sharesheet/headless";
@@ -310,11 +344,12 @@ Override any part of the component with `classNames`:
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `title` | `string` | `"Share"` | Title displayed at the top |
-| `shareUrl` | `string` | **required** | URL to share (OG preview fetched automatically) |
+| `shareUrl` | `string` | **required** | URL to share |
 | `shareText` | `string` | **required** | Text to share |
 | `downloadUrl` | `string` | - | URL for download button |
 | `downloadFilename` | `string` | - | Filename for download |
 | `previewImage` | `string \| null` | - | Custom preview image URL (skips OG fetching) |
+| `fetchPreview` | `(url) => Promise<OGData \| null>` | - | Looks the link's card up when there is no `previewImage` (`fetchOGData` for Microlink). Unset: no request |
 | `shareFile` | `string \| Blob \| null` | - | File shared via native share (data URL or Blob); takes priority over URL sharing |
 | `shareFilename` | `string` | `"share.png"` | Filename for the shared file |
 | `className` | `string` | - | Class for root container |
@@ -425,10 +460,10 @@ import {
 } from "react-sharesheet";
 
 // Content only (smaller bundle)
-import { ShareSheetContent } from "react-sharesheet/content";
+import { ShareSheetContent, fetchOGData } from "react-sharesheet/content";
 
 // Drawer only
-import { ShareSheetDrawer } from "react-sharesheet/drawer";
+import { ShareSheetDrawer, fetchOGData } from "react-sharesheet/drawer";
 
 // Headless (smallest bundle - no UI components)
 import { 
