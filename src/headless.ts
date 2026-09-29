@@ -3,7 +3,7 @@
 export { useShareSheet, useShareMenu, useOGData, type UseShareSheetOptions, type UseShareMenuOptions } from "./hooks";
 
 // OG Data fetcher
-export { fetchOGData, clearOGCache, type OGData } from "./og-fetcher";
+export { fetchOGData, clearOGCache, type OGData, type OGFetcher } from "./og-fetcher";
 
 export {
   shareToWhatsApp,
